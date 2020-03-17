@@ -26,6 +26,7 @@ function ballPaint(num, result) {
   ball.style.textAlign = 'center';
   ball.style.marginRight = '10px';
   ball.style.fontSize = '12px';
+  ball.style.fontWeight = 'bold';
   ball.className = 'ballID' + num;
   var backgroundColor;
   if (num <= 10 ) {
@@ -62,10 +63,12 @@ setTimeout(function asyncCallback() {
   ballPaint(winningNum[5], result);
 }, 6000);
 
+setTimeout(function asyncCallback() {
+  var bonusText = document.getElementById('bonusText');
+  bonusText.textContent = 'Bonus!';
+}, 7000);
 
 setTimeout(function asyncCallback() {
   var showBonus = document.getElementsByClassName('showBonus')[0];
-  var bonusBall = document.createElement('div');
-  bonusBall.textContent = bonus;
-  showBonus.appendChild(bonusBall);
-}, 7000);
+  ballPaint(bonus, showBonus);
+}, 8000);
