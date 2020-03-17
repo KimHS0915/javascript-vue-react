@@ -13,7 +13,7 @@ var winningNum = shuffle.slice(0, 6).sort(function (p, c) {
   return p - c;
 });
 
-var result = document.getElementById('result');
+var result = document.querySelector('#result');
 
 function ballPaint(num, result) {
   var ball = document.createElement('div');
@@ -64,11 +64,11 @@ setTimeout(function asyncCallback() {
 }, 6000);
 
 setTimeout(function asyncCallback() {
-  var bonusText = document.getElementById('bonusText');
+  var bonusText = document.querySelector('#bonusText');
   bonusText.textContent = 'Bonus!';
 }, 7000);
 
 setTimeout(function asyncCallback() {
-  var showBonus = document.getElementsByClassName('showBonus')[0];
+  var showBonus = document.querySelector('.showBonus');
   ballPaint(bonus, showBonus);
 }, 8000);
