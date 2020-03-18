@@ -28,6 +28,12 @@ function intervalMaker() {
 
 intervalMaker();
 
+var scoreboard = {
+  rock: 1,
+  paper: 2,
+  scissors: 3
+}
+
 document.querySelectorAll('.btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
     clearInterval(interval);
@@ -37,30 +43,13 @@ document.querySelectorAll('.btn').forEach(function (btn) {
       
     var myChoice = (this.textContent).toLowerCase();
     console.log(comChoice(imgLocation), myChoice);
-    if (comChoice(imgLocation) === 'rock') {
-      if (myChoice === 'rock') {
-        console.log('Draw!');
-      } else if (myChoice === 'paper') {
-        console.log('Win!');
-      } else {
-        console.log('Lose!');
-      }      
-    } else if (comChoice(imgLocation) === 'paper') {
-      if (myChoice === 'rock') {
-        console.log('Lose!');
-      } else if (myChoice ==='paper') {
-        console.log('Draw!');
-      } else {
-        console.log('Win!');
-      }
-    } else if (comChoice(imgLocation) === 'scissors') {
-      if (myChoice === 'rock') {
-        console.log('Win!');
-      } else if (myChoice === 'paper') {
-        console.log('Lose!');
-      } else {
-        console.log('Draw!');
-      }
+    var score = scoreboard[myChoice] - scoreboard[comChoice(imgLocation)];
+    if (score == 0) {
+      console.log('Draw');
+    } else if ([-2, 1].includes(score)) { // (score == -2 || score == 1)
+      console.log('You Win');
+    } else {
+      console.log('You Lose')
     }
   });
 });
