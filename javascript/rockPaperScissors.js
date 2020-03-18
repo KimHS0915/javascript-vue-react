@@ -34,6 +34,16 @@ var scoreboard = {
   scissors: 3
 }
 
+var message = document.querySelector("#message")
+message.textContent = 'Push the button'
+
+var win = 0;
+var draw = 0;
+var lose = 0;
+
+var record = document.querySelector("#record");
+record.textContent = `Win : ${win}, Draw : ${draw}, Lose : ${lose}`;
+
 document.querySelectorAll('.btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
     clearInterval(interval);
@@ -42,14 +52,17 @@ document.querySelectorAll('.btn').forEach(function (btn) {
     }, 1000);
       
     var myChoice = (this.textContent).toLowerCase();
-    console.log(comChoice(imgLocation), myChoice);
     var score = scoreboard[myChoice] - scoreboard[comChoice(imgLocation)];
     if (score == 0) {
-      console.log('Draw');
+      message.textContent = 'Draw'
+      draw += 1
     } else if ([-2, 1].includes(score)) { // (score == -2 || score == 1)
-      console.log('You Win');
+      message.textContent = 'You Win'
+      win += 1
     } else {
-      console.log('You Lose')
+      message.textContent = 'You Lose'
+      lose += 1
     }
+    record.textContent = `Win : ${win}, Draw : ${draw}, Lose : ${lose}`;
   });
 });
