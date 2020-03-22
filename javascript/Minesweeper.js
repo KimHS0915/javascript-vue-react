@@ -39,9 +39,29 @@ document.querySelector('#exec').addEventListener('click', function() {
             e.currentTarget.textContent = '';
           } else if (dataset[line][box] === 'X') {
             e.currentTarget.textContent = 'X';
-          }
+          } 
         }
       });
+      td.addEventListener('click', function (e) {
+        var parentTr = e.currentTarget.parentNode;
+        var parentTbody = e.currentTarget.parentNode.parentNode;
+        var box = Array.prototype.indexOf.call(parentTr.children, e.currentTarget);
+        var line = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+        if (dataset[line][box] === 'X') {
+          e.currentTarget.textContent = 'B';
+        } else {
+          var around = [dataset[line][box-1], dataset[line][box+1]];
+          if (dataset[line-1]) {
+            around = around.concat([dataset[line-1][box-1], dataset[line-1][box], dataset[line-1][box+1]]);
+          }
+          if (dataset[line+1]) {
+            around = around.concat([dataset[line+1][box-1], dataset[line+1][box], dataset[line+1][box+1]]);
+          }
+          e.currentTarget.textContent = around.filter(function(v) {
+            return v === 'X';
+          }).length;
+        }
+      })
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
