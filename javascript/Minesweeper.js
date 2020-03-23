@@ -2,6 +2,7 @@ var tbody = document.querySelector('#table tbody');
 var dataset = [];
 document.querySelector('#exec').addEventListener('click', function() {
   tbody.innerHTML = '';
+  dataset = []
   var hor = parseInt(document.querySelector('#hor').value);
   var ver = parseInt(document.querySelector('#ver').value);
   var mine = parseInt(document.querySelector('#mine').value);
@@ -47,6 +48,7 @@ document.querySelector('#exec').addEventListener('click', function() {
         var parentTbody = e.currentTarget.parentNode.parentNode;
         var box = Array.prototype.indexOf.call(parentTr.children, e.currentTarget);
         var line = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+        e.currentTarget.classList.add('opened');
         if (dataset[line][box] === 'X') {
           e.currentTarget.textContent = 'B';
         } else {
@@ -57,9 +59,35 @@ document.querySelector('#exec').addEventListener('click', function() {
           if (dataset[line+1]) {
             around = around.concat([dataset[line+1][box-1], dataset[line+1][box], dataset[line+1][box+1]]);
           }
-          e.currentTarget.textContent = around.filter(function(v) {
+          CountAroundMine = around.filter(function(v) {
             return v === 'X';
           }).length;
+          e.currentTarget.textContent = CountAroundMine;
+          if (CountAroundMine === 0) {
+            var aroundBox = [];
+            if (tbody.children[line-1]) {
+              aroundBox = aroundBox.concat([
+                tbody.children[line-1].children[box-1],
+                tbody.children[line-1].children[box],
+                tbody.children[line-1].children[box+1],
+              ]);
+            }
+            aroundBox = aroundBox.concat([
+              tbody.children[line].children[box-1],
+              tbody.children[line].children[box+1],
+            ]);
+
+            if (tbody.children[line+1]) {
+              aroundBox = aroundBox.concat([
+                tbody.children[line+1].children[box-1],
+                tbody.children[line+1].children[box],
+                tbody.children[line+1].children[box+1],
+              ]);
+            }
+            aroundBox.filter(function (v) { return !!v }).forEach(function(nextBox) {
+              nextBox.click();
+            })
+          }
         }
       })
       tr.appendChild(td);
