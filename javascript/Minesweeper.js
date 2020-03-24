@@ -23,7 +23,7 @@ document.querySelector('#exec').addEventListener('click', function() {
     var tr = document.createElement('tr');
     dataset.push(arr);
     for (var j = 0; j < hor; j++) {
-      arr.push(1); 
+      arr.push(0); 
       var td = document.createElement('td');
       td.addEventListener('contextmenu', function (e) {
         e.preventDefault();
@@ -52,6 +52,7 @@ document.querySelector('#exec').addEventListener('click', function() {
         if (dataset[line][box] === 'X') {
           e.currentTarget.textContent = 'B';
         } else {
+          dataset[line][box] = 1;
           var around = [dataset[line][box-1], dataset[line][box+1]];
           if (dataset[line-1]) {
             around = around.concat([dataset[line-1][box-1], dataset[line-1][box], dataset[line-1][box+1]]);
@@ -85,11 +86,17 @@ document.querySelector('#exec').addEventListener('click', function() {
               ]);
             }
             aroundBox.filter(function (v) { return !!v }).forEach(function(nextBox) {
-              nextBox.click();
-            })
+              var parentTr = e.currentTarget.parentNode;
+              var parentTbody = e.currentTarget.parentNode.parentNode;
+              var nextBoxBox = Array.prototype.indexOf.call(parentTr.children, e.currentTarget);
+              var NextBoxLine = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+              if (dataset[NextBoxLine][nextBoxBox] === 1){
+                nextBox.click();
+              }
+            });
           }
         }
-      })
+      });
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
