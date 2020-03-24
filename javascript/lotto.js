@@ -44,24 +44,13 @@ function ballPaint(num, result) {
   result.appendChild(ball);
 }
 
-setTimeout(function asyncCallback() {
-  ballPaint(winningNum[0], result);
-}, 1000);
-setTimeout(function asyncCallback() {
-  ballPaint(winningNum[1], result);
-}, 2000);
-setTimeout(function asyncCallback() {
-  ballPaint(winningNum[2], result);
-}, 3000);
-setTimeout(function asyncCallback() {
-  ballPaint(winningNum[3], result);
-}, 4000);
-setTimeout(function asyncCallback() {
-  ballPaint(winningNum[4], result);
-}, 5000);
-setTimeout(function asyncCallback() {
-  ballPaint(winningNum[5], result);
-}, 6000);
+for (var i = 0; i < winningNum.length; i++) {
+  (function closure(j) {
+    setTimeout(function () {
+      ballPaint(winningNum[j], result);
+    }, (j + 1) * 1000);
+  })(i);
+}
 
 setTimeout(function asyncCallback() {
   var bonusText = document.querySelector('#bonusText');
