@@ -22,8 +22,12 @@ function check(targetRow, targetBox) {
   return complete;
 }
 
-function reset() {  
-  result.textContent = turn + ' Win!';
+function reset(draw) {
+  if (draw) {
+    result.textContent = 'Draw!';
+  } else {
+    result.textContent = turn + ' Win!';
+  }
   setTimeout(function() {
     result.textContent = '';
     boxes.forEach(function (row) {
@@ -48,23 +52,25 @@ var asyncCallback = function (event) {
 
     var complete = check(targetRow, targetBox);
 
+    var boxList = [];
+    boxes.forEach(function (row) {
+      row.forEach(function (box) {
+        boxList.push(box);
+      });
+    });
+    boxList = boxList.filter(function (box) {
+      return !box.textContent;
+    });
+
     if (complete) {
       reset();
+    } else if (boxList.length === 0) {
+      reset(true);
     } else {
       if (turn === 'X') {
         turn = 'O';
       }
       setTimeout(function() {
-        console.log('CPU TURN');
-        var boxList = [];
-        boxes.forEach(function (row) {
-          row.forEach(function (box) {
-            boxList.push(box);
-          });
-        });
-        boxList = boxList.filter(function (box) {
-          return !box.textContent;
-        });
         var SelectBox = boxList[Math.floor(Math.random() * boxList.length)];
         SelectBox.textContent = 'O';
 
