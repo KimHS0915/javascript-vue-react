@@ -22,14 +22,17 @@ function check(targetRow, targetBox) {
   return complete;
 }
 
-function reset() {
+function reset() {  
   result.textContent = turn + ' Win!';
-  turn = 'X';
-  boxes.forEach(function (row) {
-    row.forEach(function (box) {
-      box.textContent = '';
+  setTimeout(function() {
+    result.textContent = '';
+    boxes.forEach(function (row) {
+      row.forEach(function (box) {
+        box.textContent = '';
+      });
     });
-  });
+    turn = 'X';
+  }, 1000);
 }
 
 
