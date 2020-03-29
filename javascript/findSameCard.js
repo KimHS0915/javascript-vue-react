@@ -1,15 +1,18 @@
 var hor = 4;
 var ver = 3;
-var colorList = ['red', 'red', 'orange', 'orange', 'yellow', 'yellow', 'green', 'green', 'blue', 'blue', 'indigo', 'indigo'];
+var preparedColor = ['red', 'red', 'orange', 'orange', 'yellow', 'yellow', 'green', 'green', 'blue', 'blue', 'indigo', 'indigo']; 
+var colorList = preparedColor.slice();
 var colors = [];
 var clickFlag = false;
 var clickCards = [];
 var completeCards = [];
+var startTime;
 
-for (var i = 0; colorList.length > 0; i++) {
-  colors = colors.concat(colorList.splice(Math.floor(Math.random() * colorList.length), 1));
+function shuffle () {
+  for (var i = 0; colorList.length > 0; i++) {
+    colors = colors.concat(colorList.splice(Math.floor(Math.random() * colorList.length), 1));
+  }
 }
-console.log(colors);
 
 function cardSetting (hor, ver) {
   for (var i = 0; i < hor * ver; i++) {
@@ -35,6 +38,17 @@ function cardSetting (hor, ver) {
               completeCards.push(clickCards[0]);
               completeCards.push(clickCards[1]);
               clickCards = [];
+              if (completeCards.length === hor * ver) {
+                var endTime = new Date();
+                alert('You Win! ' + (endTime - startTime) / 1000 + 'sec');
+                document.querySelector('#wrapper').innerHTML = '';
+                colorList = preparedColor.slice();
+                colors = [];
+                completeCards = [];
+                startTime;
+                shuffle();
+                cardSetting(hor, ver);
+              }
             } else {
               clickFlag = false;
               setTimeout(function() {
@@ -48,7 +62,7 @@ function cardSetting (hor, ver) {
         }
       });
     })(card);
-    document.body.appendChild(card);
+    document.querySelector('#wrapper').appendChild(card);
   }
 
   document.querySelectorAll('.card').forEach(function (card, index) {
@@ -62,7 +76,9 @@ function cardSetting (hor, ver) {
       card.classList.remove('flipped');
     });
     clickFlag = true;
+    startTime = new Date();
   }, 5000);
 }
 
+shuffle();
 cardSetting(hor, ver);
