@@ -15,7 +15,7 @@ var startTime;
 var endTime;
 
 document.querySelector('#exec').addEventListener('click', function() {
-  document.querySelector('#timeCheck').textContent = ''
+  document.querySelector('#timeCheck').textContent = '';
   startTime = new Date();
   tbody.innerHTML = '';
   document.querySelector('#result').textContent = '';
@@ -98,7 +98,7 @@ document.querySelector('#exec').addEventListener('click', function() {
           e.currentTarget.textContent = 'B';
           document.querySelector('#result').textContent = 'You Lose';
           endTime = new Date();
-          document.querySelector('#timeCheck').textContent = (endTime - startTime) / 1000 + ' sec'
+          document.querySelector('#timeCheck').textContent = (endTime - startTime) / 1000 + ' sec';
           stopFlag = true;
         } else {
           var around = [dataset[line][box-1], dataset[line][box+1]];
@@ -148,7 +148,7 @@ document.querySelector('#exec').addEventListener('click', function() {
         if (openBox === hor * ver - mine) {
           stopFlag = true;
           endTime = new Date();
-          document.querySelector('#timeCheck').textContent = (endTime - startTime) / 1000 + ' sec'
+          document.querySelector('#timeCheck').textContent = (endTime - startTime) / 1000 + ' sec';
           document.querySelector('#result').textContent = 'You Win';
         }
       });
