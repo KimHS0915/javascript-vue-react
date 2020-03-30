@@ -11,8 +11,12 @@ var codeDict = {
   mine: 1,
   normalBox: 0,
 };
+var startTime;
+var endTime;
 
 document.querySelector('#exec').addEventListener('click', function() {
+  document.querySelector('#timeCheck').textContent = ''
+  startTime = new Date();
   tbody.innerHTML = '';
   document.querySelector('#result').textContent = '';
   dataset = [];
@@ -93,6 +97,8 @@ document.querySelector('#exec').addEventListener('click', function() {
         if (dataset[line][box] === codeDict.mine) {
           e.currentTarget.textContent = 'B';
           document.querySelector('#result').textContent = 'You Lose';
+          endTime = new Date();
+          document.querySelector('#timeCheck').textContent = (endTime - startTime) / 1000 + ' sec'
           stopFlag = true;
         } else {
           var around = [dataset[line][box-1], dataset[line][box+1]];
@@ -141,6 +147,8 @@ document.querySelector('#exec').addEventListener('click', function() {
         }
         if (openBox === hor * ver - mine) {
           stopFlag = true;
+          endTime = new Date();
+          document.querySelector('#timeCheck').textContent = (endTime - startTime) / 1000 + ' sec'
           document.querySelector('#result').textContent = 'You Win';
         }
       });
