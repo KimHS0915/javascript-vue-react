@@ -15,14 +15,14 @@
         #my-deck, #rival-deck {
             display: inline-block;
             vertical-align: top;
-            width: 200px;
+            width: 300px;
         }
         #rival-deck, #rival-hero, #rival-cards, #my-cards, #my-hero, #my-deck {
             text-align: center;
         }
         .card {
-            width: 50px;
-            height: 75px;
+            width: 75px;
+            height: 120px;
             display: inline-block;
             position: relative;
             border: 1px solid black;
@@ -30,12 +30,15 @@
         }
         .card-name {
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
         }
-        .card-att, .card-hp, card-cost {
-            font-size: 12px;
-            width: 15px;
-            height: 15px;
+        .card-att, .card-hp, .card-cost {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 30px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: inline-block;
             position: absolute;
@@ -45,13 +48,18 @@
         .card-cost {
             bottom: auto;
             top: 0;
-            right: 0;
+            left: 0;
+            background-color: blue;
+            color: white;
         }
         .card-att {
             left: 0;
+            background-color: yellow;
         }
         .card-hp {
             right: 0;
+            background-color: red;
+            color: white;
         }
     </style>
 </head>
@@ -65,22 +73,7 @@
                 <div class="card-hp">10</div>
             </div>
         </div>
-        <div id="rival-cards">
-            <div class="card">
-                <div class="card-cost">2</div>
-                <div class="card-att">5</div>
-                <div class="card-hp">10</div>
-            </div>
-            <div class="card">
-                <div class="card-cost">2</div>
-                <div class="card-att">5</div>
-                <div class="card-hp">10</div>
-            </div>
-            <div class="card">
-                <div class="card-cost">2</div>
-                <div class="card-att">5</div>
-                <div class="card-hp">10</div>
-            </div>
+        <div id="rival-cards" style="height: 150px">
         </div>
     </div>
     <div id="rival-deck">
@@ -113,22 +106,7 @@
     </div>
     <hr />
     <div id="my">
-        <div id="my-cards">
-            <div class="card">
-                <div class="card-cost">2</div>
-                <div class="card-att">5</div>
-                <div class="card-hp">10</div>
-            </div>
-            <div class="card">
-                <div class="card-cost">2</div>
-                <div class="card-att">5</div>
-                <div class="card-hp">10</div>
-            </div>
-            <div class="card">
-                <div class="card-cost">2</div>
-                <div class="card-att">5</div>
-                <div class="card-hp">10</div>
-            </div>
+        <div id="my-cards" style="height: 150px">
         </div>
         <div id="my-hero">
             <div class="card">
