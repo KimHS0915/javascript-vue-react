@@ -34,7 +34,7 @@ function createMyDeck(num) {
 }
 
 function createRivalHero() {
-  rivalHero = cardFactory(true);
+  rivalHeroData = cardFactory(true);
   var card = document.querySelector('.card-hidden .card').cloneNode(true);
   card.querySelector('.card-att').textContent = rivalHeroData.att;
   card.querySelector('.card-hp').textContent = rivalHeroData.hp;
@@ -42,7 +42,7 @@ function createRivalHero() {
 }
 
 function createMyHero() {
-  myHero = cardFactory(true);
+  myHeroData = cardFactory(true);
   var card = document.querySelector('.card-hidden .card').cloneNode(true);
   card.querySelector('.card-att').textContent = myHeroData.att;
   card.querySelector('.card-hp').textContent = myHeroData.hp;
@@ -64,6 +64,7 @@ function Card() {
 function HeroCard() {
   this.att = Math.ceil(Math.random() * 2);
   this.hp = Math.ceil(Math.random() * 5) + 15;
+  this.hero = true;
 }
 function cardFactory(hero) {
   if (hero) {
