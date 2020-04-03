@@ -7,16 +7,26 @@ var myDeckData = [];
 var rivalHeroData;
 var myHeroData;
 
+function cardDomConnect(data, dom, hero) {
+  var card = document.querySelector('.card-hidden .card').cloneNode(true);
+  card.querySelector('.card-cost').textContent = data.cost;
+  card.querySelector('.card-att').textContent = data.att;
+  card.querySelector('.card-hp').textContent = data.hp;
+  if (hero) {
+    card.querySelector('.card-cost').style.display = 'none';
+    var name = document.createElement('div');
+    name.textContent = 'Hero';
+    card.appendChild(name);
+  }
+  dom.appendChild(card);
+}
+
 function createRivalDeck(num) {
   for (var i = 0; i < num; i++) {
     rivalDeckData.push(cardFactory());
   }
   rivalDeckData.forEach(function(data) {
-    var card = document.querySelector('.card-hidden .card').cloneNode(true);
-    card.querySelector('.card-cost').textContent = data.cost;
-    card.querySelector('.card-att').textContent = data.att;
-    card.querySelector('.card-hp').textContent = data.hp;
-    rivalDeck.appendChild(card);
+    cardDomConnect(data, rivalDeck);
   });
 }
 
@@ -25,35 +35,18 @@ function createMyDeck(num) {
     myDeckData.push(cardFactory());
   }
   myDeckData.forEach(function(data) {
-    var card = document.querySelector('.card-hidden .card').cloneNode(true);
-    card.querySelector('.card-cost').textContent = data.cost;
-    card.querySelector('.card-att').textContent = data.att;
-    card.querySelector('.card-hp').textContent = data.hp;
-    myDeck.appendChild(card);
+    cardDomConnect(data, myDeck);
   });  
 }
 
 function createRivalHero() {
   rivalHeroData = cardFactory(true);
-  var card = document.querySelector('.card-hidden .card').cloneNode(true);
-  card.querySelector('.card-att').textContent = rivalHeroData.att;
-  card.querySelector('.card-hp').textContent = rivalHeroData.hp;
-  rivalHero.appendChild(card);
+  cardDomConnect(rivalHeroData, rivalHero, true);
 }
 
 function createMyHero() {
   myHeroData = cardFactory(true);
-  var card = document.querySelector('.card-hidden .card').cloneNode(true);
-  card.querySelector('.card-att').textContent = myHeroData.att;
-  card.querySelector('.card-hp').textContent = myHeroData.hp;
-  myHero.appendChild(card);
-}
-
-function initialSetting() {
-  createRivalDeck(5);
-  createMyDeck(5);
-  createRivalHero();
-  createMyHero();
+  cardDomConnect(myHeroData, myHero, true);
 }
 
 function Card() {
@@ -72,6 +65,13 @@ function cardFactory(hero) {
   } else {
     return new Card();
   }
+}
+
+function initialSetting() {
+  createRivalDeck(5);
+  createMyDeck(5);
+  createRivalHero();
+  createMyHero();
 }
 
 initialSetting();
