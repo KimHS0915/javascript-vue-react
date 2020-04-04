@@ -6,6 +6,7 @@ var rivalField = document.getElementById('rival-field');
 var myField = document.getElementById('my-field');
 var rivalCost = document.getElementById('rival-cost');
 var myCost = document.getElementById('my-cost');
+var turnBtn = document.getElementById('turn-btn');
 var rivalDeckData = [];
 var myDeckData = [];
 var rivalHeroData;
@@ -134,3 +135,9 @@ function initialSetting() {
 }
 
 initialSetting();
+
+turnBtn.addEventListener('click', function() {
+  turn = !turn;
+  document.getElementById('rival').classList.toggle('turn');
+  document.getElementById('my').classList.toggle('turn');
+});

@@ -64,11 +64,19 @@
         .card-hidden {
             display: none;
         }
+        #turn-btn {
+            float: right;
+            position: relative;
+            top: -20px;
+        }
+        .turn {
+            border: 1px solid black;
+        }
     </style>
 </head>
 <body>
     <div id="rival">
-        <div>Cost: <span id="rival-cost">10</span></div>
+        <div>Cost : <span id="rival-cost">10</span>/10</div>
         <div id="rival-hero"></div>
         <div id="rival-field" style="height: 150px">
         </div>
@@ -77,11 +85,12 @@
         <div>Rival Deck</div>
     </div>
     <hr />
-    <div id="my">
+    <button id="turn-btn">Next Turn</button>
+    <div id="my" class="turn">
         <div id="my-field" style="height: 150px">
         </div>
         <div id="my-hero"></div>
-        <div>Cost: <span id="my-cost">10</span></div>
+        <div>Cost : <span id="my-cost">10</span>/10</div>
     </div>
     <div id="my-deck">
         <div>My Deck</div>
