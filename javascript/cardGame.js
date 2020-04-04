@@ -28,7 +28,7 @@ function cardDomConnect(data, dom, hero) {
   }
   card.addEventListener('click', function(card) {
     if (turn) {
-      if (!data.mine) {
+      if (!data.mine || data.field) {
         return;
       }
       var currentCost = Number(myCost.textContent);
@@ -46,9 +46,11 @@ function cardDomConnect(data, dom, hero) {
       myDeckData.forEach(function(data) {
         cardDomConnect(data, myDeck);
       });
+      data.field = true;
       myCost.textContent = currentCost - data.cost;
+      createMyDeck(1);
     } else {
-      if (data.mine) {
+      if (data.mine || data.field) {
         return;
       }
       var currentCost = Number(rivalCost.textContent);
@@ -67,7 +69,9 @@ function cardDomConnect(data, dom, hero) {
       rivalDeckData.forEach(function(data) {
         cardDomConnect(data, rivalDeck);
       });
+      data.field = true;
       rivalCost.textContent = currentCost - data.cost;
+      createRivalDeck(1);
     }
   });
   dom.appendChild(card);
@@ -77,6 +81,7 @@ function createRivalDeck(num) {
   for (var i = 0; i < num; i++) {
     rivalDeckData.push(cardFactory());
   }
+  rivalDeck.innerHTML = '';
   rivalDeckData.forEach(function(data) {
     cardDomConnect(data, rivalDeck);
   });
@@ -86,6 +91,7 @@ function createMyDeck(num) {
   for (var i = 0; i < num; i++) {
     myDeckData.push(cardFactory(false, true));
   }
+  myDeck.innerHTML = '';
   myDeckData.forEach(function(data) {
     cardDomConnect(data, myDeck);
   });  
@@ -138,6 +144,11 @@ initialSetting();
 
 turnBtn.addEventListener('click', function() {
   turn = !turn;
+  if (turn) {
+    myCost.textContent = 10;
+  } else {
+    rivalCost.textContent = 10;
+  }
   document.getElementById('rival').classList.toggle('turn');
   document.getElementById('my').classList.toggle('turn');
 });
