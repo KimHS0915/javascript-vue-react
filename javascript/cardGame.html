@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Card Game</title>
     <style>
-        #my, #rival {
+        #player, #rival {
             display: inline-block;
             vertical-align: top;
             margin-right: 50px;
@@ -12,13 +12,13 @@
         #rival {
             vertical-align: bottom;
         }
-        #my-deck, #rival-deck {
+        #player-deck, #rival-deck {
             display: inline-block;
             vertical-align: top;
             width: 300px;
             background: silver;
         }
-        #rival-deck, #rival-hero, #rival-cards, #my-cards, #my-hero, #my-deck {
+        #rival-deck, #rival-hero, #rival-cards, #player-cards, #player-hero, #player-deck {
             text-align: center;
         }
         .card {
@@ -88,14 +88,14 @@
     </div>
     <hr />
     <button id="turn-btn">Next Turn</button>
-    <div id="my" class="turn">
-        <div id="my-field" style="height: 150px">
+    <div id="player" class="turn">
+        <div id="player-field" style="height: 150px">
         </div>
-        <div id="my-hero"></div>
-        <div>Cost : <span id="my-cost">10</span>/10</div>
+        <div id="player-hero"></div>
+        <div>Cost : <span id="player-cost">10</span>/10</div>
     </div>
-    <div id="my-deck">
-        <div>My Deck</div>
+    <div id="player-deck">
+        <div>player Deck</div>
     </div>
     <div class="card-hidden">
         <div class="card">

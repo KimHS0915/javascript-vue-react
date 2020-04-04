@@ -1,19 +1,46 @@
-var rivalHero = document.getElementById('rival-hero');
-var myHero = document.getElementById('my-hero');
-var rivalDeck = document.getElementById('rival-deck');
-var myDeck = document.getElementById('my-deck');
-var rivalField = document.getElementById('rival-field');
-var myField = document.getElementById('my-field');
-var rivalCost = document.getElementById('rival-cost');
-var myCost = document.getElementById('my-cost');
+var rival = {
+  hero : document.getElementById('rival-hero'),
+  deck : document.getElementById('rival-deck'),
+  field : document.getElementById('rival-field'),
+  cost : document.getElementById('rival-cost'),
+  deckData : [],
+  heroData : [],
+  fieldData : [],  
+};
+
+var player = {
+  hero : document.getElementById('player-hero'),
+  deck : document.getElementById('player-deck'),
+  field : document.getElementById('player-field'),
+  cost : document.getElementById('player-cost'),
+  deckData : [],
+  heroData : [],
+  fieldData : [],  
+}
+
 var turnBtn = document.getElementById('turn-btn');
-var rivalDeckData = [];
-var myDeckData = [];
-var rivalHeroData;
-var myHeroData;
-var rivalFieldData = [];
-var myFieldData = [];
 var turn = true;
+
+function deckToField(data, myTurn) {
+  var obj = myTurn ? player : rival;
+  var currentCost = Number(obj.cost.textContent);
+  if (currentCost < data.cost) {
+    return 'end';
+  }
+  var idx = obj.deckData.indexOf(data);
+  obj.deckData.splice(idx, 1);
+  obj.fieldData.push(data);
+  obj.deck.innerHTML = '';
+  obj.field.innerHTML = '';
+  obj.fieldData.forEach(function(data) {
+    cardDomConnect(data, obj.field);
+  });
+  obj.deckData.forEach(function(data) {
+    cardDomConnect(data, obj.deck);
+  });
+  data.field = true;
+  obj.cost.textContent = currentCost - data.cost;  
+}
 
 function cardDomConnect(data, dom, hero) {
   var card = document.querySelector('.card-hidden .card').cloneNode(true);
@@ -31,47 +58,16 @@ function cardDomConnect(data, dom, hero) {
       if (!data.mine || data.field) {
         return;
       }
-      var currentCost = Number(myCost.textContent);
-      if (currentCost < data.cost) {
-        return;
+      if (deckToField(data, true) !== 'end') {
+        createplayerDeck(1);
       }
-      var idx = myDeckData.indexOf(data);
-      myDeckData.splice(idx, 1);
-      myFieldData.push(data);
-      myDeck.innerHTML = '';
-      myField.innerHTML = '';
-      myFieldData.forEach(function(data) {
-        cardDomConnect(data, myField);
-      });
-      myDeckData.forEach(function(data) {
-        cardDomConnect(data, myDeck);
-      });
-      data.field = true;
-      myCost.textContent = currentCost - data.cost;
-      createMyDeck(1);
     } else {
       if (data.mine || data.field) {
         return;
       }
-      var currentCost = Number(rivalCost.textContent);
-      if (currentCost < data.cost) {
-        return;
-      }      
-      var idx = rivalDeckData.indexOf(data);
-      rivalDeckData.splice(idx, 1);
-      rivalFieldData.push(data);
-      console.log(rivalDeckData, rivalFieldData);
-      rivalDeck.innerHTML = '';
-      rivalField.innerHTML = '';
-      rivalFieldData.forEach(function(data) {
-        cardDomConnect(data, rivalField);
-      });
-      rivalDeckData.forEach(function(data) {
-        cardDomConnect(data, rivalDeck);
-      });
-      data.field = true;
-      rivalCost.textContent = currentCost - data.cost;
-      createRivalDeck(1);
+      if (deckToField(data, false) !== 'end') {
+        createRivalDeck(1);
+      }
     }
   });
   dom.appendChild(card);
@@ -79,65 +75,65 @@ function cardDomConnect(data, dom, hero) {
 
 function createRivalDeck(num) {
   for (var i = 0; i < num; i++) {
-    rivalDeckData.push(cardFactory());
+    rival.deckData.push(cardFactory());
   }
-  rivalDeck.innerHTML = '';
-  rivalDeckData.forEach(function(data) {
-    cardDomConnect(data, rivalDeck);
+  rival.deck.innerHTML = '';
+  rival.deckData.forEach(function(data) {
+    cardDomConnect(data, rival.deck);
   });
 }
 
-function createMyDeck(num) {
+function createplayerDeck(num) {
   for (var i = 0; i < num; i++) {
-    myDeckData.push(cardFactory(false, true));
+    player.deckData.push(cardFactory(false, true));
   }
-  myDeck.innerHTML = '';
-  myDeckData.forEach(function(data) {
-    cardDomConnect(data, myDeck);
+  player.deck.innerHTML = '';
+  player.deckData.forEach(function(data) {
+    cardDomConnect(data, player.deck);
   });  
 }
 
 function createRivalHero() {
-  rivalHeroData = cardFactory(true);
-  cardDomConnect(rivalHeroData, rivalHero, true);
+  rival.heroData = cardFactory(true);
+  cardDomConnect(rival.heroData, rival.hero, true);
 }
 
-function createMyHero() {
-  myHeroData = cardFactory(true, true);
-  cardDomConnect(myHeroData, myHero, true);
+function createplayerHero() {
+  player.heroData = cardFactory(true, true);
+  cardDomConnect(player.heroData, player.hero, true);
 }
 
-function Card(myCard) {
+function Card(playerCard) {
   this.att = Math.ceil(Math.random() * 5);
   this.hp = Math.ceil(Math.random() * 5);
   this.cost = Math.floor(this.att + this.hp) / 2;
-  if (myCard) {
+  if (playerCard) {
     this.mine = true;
   }
 }
 
-function HeroCard(myCard) {
+function HeroCard(playerCard) {
   this.att = Math.ceil(Math.random() * 2);
   this.hp = Math.ceil(Math.random() * 5) + 15;
   this.hero = true;
-  if (myCard) {
+  if (playerCard) {
     this.mine = true;
   }
 }
 
-function cardFactory(hero, myCard) {
+function cardFactory(hero, playerCard) {
   if (hero) {
-    return new HeroCard(myCard);
+    return new HeroCard(playerCard);
   } else {
-    return new Card(myCard);
+    return new Card(playerCard);
   }
 }
 
 function initialSetting() {
   createRivalDeck(5);
-  createMyDeck(5);
+  createplayerDeck(5);
   createRivalHero();
-  createMyHero();
+  createplayerHero();
 }
 
 initialSetting();
@@ -145,10 +141,10 @@ initialSetting();
 turnBtn.addEventListener('click', function() {
   turn = !turn;
   if (turn) {
-    myCost.textContent = 10;
+    player.cost.textContent = 10;
   } else {
-    rivalCost.textContent = 10;
+    rival.cost.textContent = 10;
   }
   document.getElementById('rival').classList.toggle('turn');
-  document.getElementById('my').classList.toggle('turn');
+  document.getElementById('player').classList.toggle('turn');
 });
