@@ -5,7 +5,9 @@ var rival = {
   cost : document.getElementById('rival-cost'),
   deckData : [],
   heroData : [],
-  fieldData : [],  
+  fieldData : [],
+  selectedCard : null,
+  selectedCardData : null,
 };
 
 var player = {
@@ -15,11 +17,27 @@ var player = {
   cost : document.getElementById('player-cost'),
   deckData : [],
   heroData : [],
-  fieldData : [],  
+  fieldData : [],
+  selectedCard : null,
+  selectedCardData : null,
 }
 
 var turnBtn = document.getElementById('turn-btn');
 var turn = true;
+
+function rePaintDisplay(myDisplay) {
+  var obj = myDisplay ? player : rival;
+  obj.deck.innerHTML = '';
+  obj.field.innerHTML = '';
+  obj.hero.innerHTML = '';
+  obj.fieldData.forEach(function(data) {
+    cardDomConnect(data, obj.field);
+  });
+  obj.deckData.forEach(function(data) {
+    cardDomConnect(data, obj.deck);
+  });
+  cardDomConnect(obj.heroData, obj.hero, true);
+}
 
 function deckToField(data, myTurn) {
   var obj = myTurn ? player : rival;
@@ -53,13 +71,34 @@ function cardDomConnect(data, dom, hero) {
     name.textContent = 'Hero';
     card.appendChild(name);
   }
-  card.addEventListener('click', function(card) {
+  card.addEventListener('click', function() {
+    console.log(card, data)
     if (turn) {
-      if (!data.mine || data.field) {
+      if (card.classList.contains('card-turnover')) {
         return;
       }
-      if (deckToField(data, true) !== 'end') {
-        createplayerDeck(1);
+      if (!data.mine && player.selectedCard) {
+        data.hp = data.hp - player.selectedCardData.att;
+        rePaintDisplay(false);
+        player.selectedCard.classList.remove('card-selected');
+        player.selectedCard.classList.add('card-turnover');
+        player.selectedCard = null;
+        player.selectedCardData = null;
+        return;
+      } else if (!data.mine) {
+        return;
+      }
+      if (data.field) { 
+        card.parentNode.querySelectorAll('.card').forEach(function (card) {
+          card.classList.remove('card-selected');
+        });
+        card.classList.add('card-selected');
+        player.selectedCard = card;
+        player.selectedCardData = data;
+      } else {
+        if (deckToField(data, true) !== 'end') {
+          createplayerDeck(1);
+        }
       }
     } else {
       if (data.mine || data.field) {
