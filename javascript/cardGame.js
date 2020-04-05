@@ -79,6 +79,15 @@ function cardDomConnect(data, dom, hero) {
       }
       if (!data.mine && player.selectedCard) {
         data.hp = data.hp - player.selectedCardData.att;
+        if (data.hp <= 0) {
+          var index = rival.fieldData.indexOf(data);
+          if (index > -1) {
+            rival.fieldData.splice(index, 1);
+          } else {
+            alert('You Win!');
+            initialSetting();
+          }
+        }
         rePaintDisplay(false);
         player.selectedCard.classList.remove('card-selected');
         player.selectedCard.classList.add('card-turnover');
@@ -106,6 +115,15 @@ function cardDomConnect(data, dom, hero) {
       }
       if (data.mine && rival.selectedCard) {
         data.hp = data.hp - rival.selectedCardData.att;
+        if (data.hp <= 0) {
+          var index = player.fieldData.indexOf(data);
+          if (index > -1) {
+            player.fieldData.splice(index, 1);
+          } else {
+            alert('You Lose!');
+            initialSetting();            
+          }
+        }
         rePaintDisplay(true);
         rival.selectedCard.classList.remove('card-selected');
         rival.selectedCard.classList.add('card-turnover');
@@ -190,10 +208,18 @@ function cardFactory(hero, playerCard) {
 }
 
 function initialSetting() {
+  [rival, player].forEach(function (item) {
+    item.heroData = [];
+    item.fieldData = [];
+    item.deckData = [];
+    item.selectedCardData = [];
+  });
   createRivalDeck(5);
   createplayerDeck(5);
   createRivalHero();
   createplayerHero();
+  rePaintDisplay(true);
+  rePaintDisplay(false);
 }
 
 initialSetting();
