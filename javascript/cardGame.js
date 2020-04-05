@@ -101,11 +101,31 @@ function cardDomConnect(data, dom, hero) {
         }
       }
     } else {
-      if (data.mine || data.field) {
+      if (card.classList.contains('card-turnover')) {
         return;
       }
-      if (deckToField(data, false) !== 'end') {
-        createRivalDeck(1);
+      if (data.mine && rival.selectedCard) {
+        data.hp = data.hp - rival.selectedCardData.att;
+        rePaintDisplay(true);
+        rival.selectedCard.classList.remove('card-selected');
+        rival.selectedCard.classList.add('card-turnover');
+        rival.selectedCard = null;
+        rival.selectedCardData = null;
+        return;
+      } else if (data.mine) {
+        return;
+      }
+      if (data.field) {
+        card.parentNode.querySelectorAll('.card').forEach(function (card) {
+          card.classList.remove('card-selected');
+        });
+        card.classList.add('card-selected');
+        rival.selectedCard = card;
+        rival.selectedCardData = data;
+      } else {
+        if (deckToField(data, false) !== 'end') {
+          createRivalDeck(1);
+        }
       }
     }
   });
@@ -155,6 +175,7 @@ function HeroCard(playerCard) {
   this.att = Math.ceil(Math.random() * 2);
   this.hp = Math.ceil(Math.random() * 5) + 15;
   this.hero = true;
+  this.field = true;
   if (playerCard) {
     this.mine = true;
   }
@@ -178,12 +199,20 @@ function initialSetting() {
 initialSetting();
 
 turnBtn.addEventListener('click', function() {
+  var obj = turn ? player : rival;
+  document.getElementById('rival').classList.toggle('turn');
+  document.getElementById('player').classList.toggle('turn');
+  obj.field.innerHTML = '';
+  obj.hero.innerHTML = '';
+  obj.fieldData.forEach(function(data) {
+    cardDomConnect(data, obj.field);
+  });
+  cardDomConnect(obj.heroData, obj.hero, true);
+
   turn = !turn;
   if (turn) {
     player.cost.textContent = 10;
   } else {
     rival.cost.textContent = 10;
   }
-  document.getElementById('rival').classList.toggle('turn');
-  document.getElementById('player').classList.toggle('turn');
 });
