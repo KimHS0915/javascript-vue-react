@@ -25,18 +25,30 @@ var player = {
 var turnBtn = document.getElementById('turn-btn');
 var turn = true;
 
-function rePaintDisplay(myDisplay) {
-  var obj = myDisplay ? player : rival;
-  obj.deck.innerHTML = '';
+function rePaintField(obj) {
   obj.field.innerHTML = '';
-  obj.hero.innerHTML = '';
   obj.fieldData.forEach(function(data) {
     cardDomConnect(data, obj.field);
   });
+}
+
+function rePaintDeck(obj) {
+  obj.deck.innerHTML = '';
   obj.deckData.forEach(function(data) {
     cardDomConnect(data, obj.deck);
   });
+}
+
+function rePaintHero(obj) {
+  obj.hero.innerHTML = '';
   cardDomConnect(obj.heroData, obj.hero, true);
+}
+
+function rePaintDisplay(myDisplay) {
+  var obj = myDisplay ? player : rival;
+  rePaintField(obj);
+  rePaintDeck(obj);
+  rePaintHero(obj);
 }
 
 function deckToField(data, myTurn) {
@@ -48,16 +60,51 @@ function deckToField(data, myTurn) {
   var idx = obj.deckData.indexOf(data);
   obj.deckData.splice(idx, 1);
   obj.fieldData.push(data);
-  obj.deck.innerHTML = '';
-  obj.field.innerHTML = '';
-  obj.fieldData.forEach(function(data) {
-    cardDomConnect(data, obj.field);
-  });
-  obj.deckData.forEach(function(data) {
-    cardDomConnect(data, obj.deck);
-  });
+  rePaintField(obj);
+  rePaintDeck(obj);
   data.field = true;
   obj.cost.textContent = currentCost - data.cost;  
+}
+
+function performTurnAction(card, data, myTurn) {
+  var friendly = myTurn ? player : rival;
+  var enemy = myTurn ? rival : player;
+  if (card.classList.contains('card-turnover')) {
+    return;
+  }
+  var enemyCard = myTurn ? !data.mine : data.mine;
+  if (enemyCard && friendly.selectedCard) {
+    data.hp = data.hp - friendly.selectedCardData.att;
+    if (data.hp <= 0) {
+      var index = enemy.fieldData.indexOf(data);
+      if (index > -1) {
+        enemy.fieldData.splice(index, 1);
+      } else {
+        alert('Game Over');
+        initialSetting();
+      }
+    }
+    rePaintDisplay(!myTurn);
+    friendly.selectedCard.classList.remove('card-selected');
+    friendly.selectedCard.classList.add('card-turnover');
+    friendly.selectedCard = null;
+    friendly.selectedCardData = null;
+    return;
+  } else if (enemyCard) {
+    return;
+  }
+  if (data.field) { 
+    document.querySelectorAll('.card').forEach(function (card) {
+      card.classList.remove('card-selected');
+    });
+    card.classList.add('card-selected');
+    friendly.selectedCard = card;
+    friendly.selectedCardData = data;
+  } else {
+    if (deckToField(data, myTurn) !== 'end') {
+      myTurn ? createplayerDeck(1) : createRivalDeck(1);
+    }
+  }
 }
 
 function cardDomConnect(data, dom, hero) {
@@ -72,80 +119,7 @@ function cardDomConnect(data, dom, hero) {
     card.appendChild(name);
   }
   card.addEventListener('click', function() {
-    console.log(card, data)
-    if (turn) {
-      if (card.classList.contains('card-turnover')) {
-        return;
-      }
-      if (!data.mine && player.selectedCard) {
-        data.hp = data.hp - player.selectedCardData.att;
-        if (data.hp <= 0) {
-          var index = rival.fieldData.indexOf(data);
-          if (index > -1) {
-            rival.fieldData.splice(index, 1);
-          } else {
-            alert('You Win!');
-            initialSetting();
-          }
-        }
-        rePaintDisplay(false);
-        player.selectedCard.classList.remove('card-selected');
-        player.selectedCard.classList.add('card-turnover');
-        player.selectedCard = null;
-        player.selectedCardData = null;
-        return;
-      } else if (!data.mine) {
-        return;
-      }
-      if (data.field) { 
-        card.parentNode.querySelectorAll('.card').forEach(function (card) {
-          card.classList.remove('card-selected');
-        });
-        card.classList.add('card-selected');
-        player.selectedCard = card;
-        player.selectedCardData = data;
-      } else {
-        if (deckToField(data, true) !== 'end') {
-          createplayerDeck(1);
-        }
-      }
-    } else {
-      if (card.classList.contains('card-turnover')) {
-        return;
-      }
-      if (data.mine && rival.selectedCard) {
-        data.hp = data.hp - rival.selectedCardData.att;
-        if (data.hp <= 0) {
-          var index = player.fieldData.indexOf(data);
-          if (index > -1) {
-            player.fieldData.splice(index, 1);
-          } else {
-            alert('You Lose!');
-            initialSetting();            
-          }
-        }
-        rePaintDisplay(true);
-        rival.selectedCard.classList.remove('card-selected');
-        rival.selectedCard.classList.add('card-turnover');
-        rival.selectedCard = null;
-        rival.selectedCardData = null;
-        return;
-      } else if (data.mine) {
-        return;
-      }
-      if (data.field) {
-        card.parentNode.querySelectorAll('.card').forEach(function (card) {
-          card.classList.remove('card-selected');
-        });
-        card.classList.add('card-selected');
-        rival.selectedCard = card;
-        rival.selectedCardData = data;
-      } else {
-        if (deckToField(data, false) !== 'end') {
-          createRivalDeck(1);
-        }
-      }
-    }
+    performTurnAction(card, data, turn);
   });
   dom.appendChild(card);
 }
@@ -154,20 +128,14 @@ function createRivalDeck(num) {
   for (var i = 0; i < num; i++) {
     rival.deckData.push(cardFactory());
   }
-  rival.deck.innerHTML = '';
-  rival.deckData.forEach(function(data) {
-    cardDomConnect(data, rival.deck);
-  });
+  rePaintDeck(rival);
 }
 
 function createplayerDeck(num) {
   for (var i = 0; i < num; i++) {
     player.deckData.push(cardFactory(false, true));
   }
-  player.deck.innerHTML = '';
-  player.deckData.forEach(function(data) {
-    cardDomConnect(data, player.deck);
-  });  
+  rePaintDeck(player);
 }
 
 function createRivalHero() {
@@ -222,19 +190,12 @@ function initialSetting() {
   rePaintDisplay(false);
 }
 
-initialSetting();
-
 turnBtn.addEventListener('click', function() {
   var obj = turn ? player : rival;
   document.getElementById('rival').classList.toggle('turn');
   document.getElementById('player').classList.toggle('turn');
-  obj.field.innerHTML = '';
-  obj.hero.innerHTML = '';
-  obj.fieldData.forEach(function(data) {
-    cardDomConnect(data, obj.field);
-  });
-  cardDomConnect(obj.heroData, obj.hero, true);
-
+  rePaintField(obj);
+  rePaintHero(obj);
   turn = !turn;
   if (turn) {
     player.cost.textContent = 10;
@@ -242,3 +203,5 @@ turnBtn.addEventListener('click', function() {
     rival.cost.textContent = 10;
   }
 });
+
+initialSetting();
