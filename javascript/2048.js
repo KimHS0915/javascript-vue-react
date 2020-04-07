@@ -17,4 +17,32 @@ function reset() {
   table.appendChild(fragment);
 }
 
+function randomCreate() {
+  var blankArray = [];
+  data.forEach(function(colData, i) {
+    colData.forEach(function(rowData, j) {
+      if (!rowData) {
+        blankArray.push([i, j]);
+      }
+    });
+  });
+  var randomBox = blankArray[Math.floor(Math.random() * blankArray.length)];
+  data[randomBox[0]][randomBox[1]] = 2;
+  paint();
+}
+
+function paint() {
+  data.forEach(function(colData, i) {
+    colData.forEach(function(rowData, j) {
+      if (rowData > 0) {
+        table.children[i].children[j].textContent = rowData;
+      } else {
+        table.children[i].children[j].textContent = '';
+      }
+    });
+  });
+}
+
 reset();
+randomCreate();
+paint();
