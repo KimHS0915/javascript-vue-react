@@ -46,3 +46,22 @@ function paint() {
 reset();
 randomCreate();
 paint();
+
+var startDrag = false;
+var startCoordinates;
+var endCoordinates;
+window.addEventListener('mousedown', function(event) {
+  console.log('mousedown', event);
+  startDrag = true;
+  startCoordinates = [event.clientX, event.clientY];
+});
+window.addEventListener('mousemove', function(event) {
+  if (startDrag) {
+    console.log('mousemove', event);
+  }
+});
+window.addEventListener('mouseup', function(event) {
+  console.log('mouseup', event);
+  startDrag = false;
+  endCoordinates = [event.clientX, event.clientY];
+});
