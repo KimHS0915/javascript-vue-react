@@ -81,4 +81,72 @@ window.addEventListener('mouseup', function(event) {
   }
   startDrag = false;
   dragging = false;
+
+  switch (direction) {
+    case 'left':
+      var newData = [[],[],[],[]];
+      data.forEach(function(colData, i) {
+        colData.forEach(function(rowData, j) {
+          if (rowData) {
+            newData[i].push(rowData);
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function(colData, i) {
+        [1, 2, 3, 4].forEach(function(rowData, j) {
+          data[i][j] = newData[i][j] || 0;        
+        });
+      });
+      break;
+    case 'right':
+      var newData = [[],[],[],[]];
+      data.forEach(function(colData, i) {
+        colData.forEach(function(rowData, j) {
+          if (rowData) {
+            newData[j].unshift(rowData);
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function(colData, i) {
+        [1, 2, 3, 4].forEach(function(rowData, j) {
+          data[i][3-j] = newData[i][j] || 0;        
+        });
+      });
+      break;
+    case 'up':
+      var newData = [[],[],[],[]];
+      data.forEach(function(colData, i) {
+        colData.forEach(function(rowData, j) {
+          if (rowData) {
+            newData[j].push(rowData);
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function(rowData, i) {
+        [1, 2, 3, 4].forEach(function(colData, j) {
+          data[j][i] = newData[i][j] || 0;        
+        });
+      });
+      break;
+    case 'down':
+      var newData = [[],[],[],[]];
+      data.forEach(function(colData, i) {
+        colData.forEach(function(rowData, j) {
+          if (rowData) {
+            newData[j].unshift(rowData);
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function(rowData, i) {
+        [1, 2, 3, 4].forEach(function(colData, j) {
+          data[3-j][i] = newData[i][j] || 0;        
+        });
+      });
+      break;
+  }
+  randomCreate();
 });
