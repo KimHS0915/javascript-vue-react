@@ -1,5 +1,6 @@
 var table = document.getElementById('table');
 var data = [];
+var score = document.getElementById('score');
 
 function reset() {
   var fragment = document.createDocumentFragment();
@@ -26,9 +27,15 @@ function randomCreate() {
       }
     });
   });
-  var randomBox = blankArray[Math.floor(Math.random() * blankArray.length)];
-  data[randomBox[0]][randomBox[1]] = 2;
-  paint();
+  if (blankArray.length === 0) {
+    alert('GameOver: ' + score.textContent);
+    table.innerHTML = '';
+    reset();
+  } else {
+    var randomBox = blankArray[Math.floor(Math.random() * blankArray.length)];
+    data[randomBox[0]][randomBox[1]] = 2;
+    paint();
+  }
 }
 
 function paint() {
@@ -88,7 +95,13 @@ window.addEventListener('mouseup', function(event) {
       data.forEach(function(colData, i) {
         colData.forEach(function(rowData, j) {
           if (rowData) {
-            newData[i].push(rowData);
+            if (newData[i][newData[i].length-1] && newData[i][newData[i].length-1] === rowData) {
+              newData[i][newData[i].length-1] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent = currentScore + newData[i][newData[i].length-1];
+            } else {
+              newData[i].push(rowData);
+            }
           }
         });
       });
@@ -104,7 +117,13 @@ window.addEventListener('mouseup', function(event) {
       data.forEach(function(colData, i) {
         colData.forEach(function(rowData, j) {
           if (rowData) {
-            newData[j].unshift(rowData);
+            if(newData[i][0] && newData[i][0] === rowData) {
+              newData[i][0] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent = currentScore + newData[i][0];
+            } else {
+              newData[i].unshift(rowData);
+            }
           }
         });
       });
@@ -120,7 +139,13 @@ window.addEventListener('mouseup', function(event) {
       data.forEach(function(colData, i) {
         colData.forEach(function(rowData, j) {
           if (rowData) {
-            newData[j].push(rowData);
+            if (newData[j][newData[j].length-1] && newData[j][newData[j].length-1] === rowData) {
+              newData[j][newData[j].length-1] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent = currentScore + newData[j][newData[j].length-1];
+            } else {
+              newData[j].push(rowData);
+            }
           }
         });
       });
@@ -136,7 +161,13 @@ window.addEventListener('mouseup', function(event) {
       data.forEach(function(colData, i) {
         colData.forEach(function(rowData, j) {
           if (rowData) {
-            newData[j].unshift(rowData);
+            if (newData[j][0] && newData[j][0] === rowData) {
+              newData[j][0] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent = currentScore + newData[j][0];
+            } else {
+              newData[j].unshift(rowData);
+            }
           }
         });
       });
