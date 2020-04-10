@@ -105,7 +105,6 @@ window.addEventListener('mouseup', function(event) {
           }
         });
       });
-      console.log(newData);
       [1, 2, 3, 4].forEach(function(colData, i) {
         [1, 2, 3, 4].forEach(function(rowData, j) {
           data[i][j] = newData[i][j] || 0;        
@@ -127,7 +126,6 @@ window.addEventListener('mouseup', function(event) {
           }
         });
       });
-      console.log(newData);
       [1, 2, 3, 4].forEach(function(colData, i) {
         [1, 2, 3, 4].forEach(function(rowData, j) {
           data[i][3-j] = newData[i][j] || 0;        
@@ -149,7 +147,6 @@ window.addEventListener('mouseup', function(event) {
           }
         });
       });
-      console.log(newData);
       [1, 2, 3, 4].forEach(function(rowData, i) {
         [1, 2, 3, 4].forEach(function(colData, j) {
           data[j][i] = newData[i][j] || 0;        
@@ -171,7 +168,6 @@ window.addEventListener('mouseup', function(event) {
           }
         });
       });
-      console.log(newData);
       [1, 2, 3, 4].forEach(function(rowData, i) {
         [1, 2, 3, 4].forEach(function(colData, j) {
           data[3-j][i] = newData[i][j] || 0;        
