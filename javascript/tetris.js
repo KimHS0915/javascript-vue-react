@@ -14,4 +14,26 @@ function CreateBox () {
   tetris.appendChild(fragment);
 }
 
+window.addEventListener('keydown', function(event) {
+  switch (event.code) {
+    case 'ArrowRight':
+      break;
+    case 'ArrowLeft':
+      break;
+    case 'ArrowDown':
+      break;
+    default:
+      break;
+  }
+});
+
+window.addEventListener('keyup', function(event) {
+  switch (event.code) {
+    case 'Spaece':
+      break;
+    case 'ArrowUp':
+      break;
+  }
+});
+
 CreateBox();
