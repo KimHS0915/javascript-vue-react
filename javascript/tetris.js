@@ -63,9 +63,10 @@ var blockDict = {
   14: ['darkblue', false, []],
   15: ['darkgreen', false, []],
   16: ['green', false, []],
-  17: ['pink', false, []],
+  17: ['purple', false, []],
 }
 var tetrisData = [];
+var stopDown = false;
 
 function createBox () {
   var fragment = document.createDocumentFragment();
@@ -93,6 +94,7 @@ function paintDisplay() {
 }
 
 function createBlock() {
+  stopDown = false;
   var block = blockArr[Math.floor(Math.random() * 7)][2];
   console.log(block);
   block.forEach(function(tr, i) {
@@ -100,6 +102,26 @@ function createBlock() {
       tetrisData[i][j + 3] = td;
     });
   });
+  paintDisplay();
+}
+
+function downBlock() {
+  for (var i = tetrisData.length - 1; i >= 0; i--) {
+    tetrisData[i].forEach(function(td, j) {
+      if (td > 0 && td < 10) {
+        if (tetrisData[i+1] && !stopDown) {
+          tetrisData[i+1][j] = td;
+          tetrisData[i][j] = 0;
+        } else {
+          stopDown = true;
+          tetrisData[i][j] = td + 10;
+        }
+      }
+    });
+  }
+  if (stopDown) {
+    createBlock();
+  }
   paintDisplay();
 }
 
@@ -127,3 +149,4 @@ window.addEventListener('keyup', function(event) {
 
 createBox();
 createBlock();
+setInterval(downBlock, 100)
