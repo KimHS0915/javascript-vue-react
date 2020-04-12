@@ -7,13 +7,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Tetris</title>
     <style>
-        #tetris {
+        #tetris #next-table {
             border-collapse: collapse;
         }
         #tetris td {
             border: 1px solid black;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
+        }
+        #next-table {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        #next-table td {
+            border: 1px solid black;
+            width: 15px;
+            height: 15px;
         }
         td.white {
             background-color: white;
@@ -43,6 +53,33 @@
 </head>
 <body>
     <table id="tetris"></table>
+    <table id="next-table">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <div>Score <span id="score">0</span></div>
     <script src="tetris.js"></script>
 </body>
 </html>

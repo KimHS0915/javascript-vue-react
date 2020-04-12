@@ -1,152 +1,356 @@
 var tetris = document.querySelector('#tetris');
-var blockArr = [
-  ['pink', true, [
-    [1, 1],
-    [1, 1],
-  ]],
-  ['red', true, [
-    [0, 2, 0],
-    [2, 2, 2],
-  ]],
-  ['blue', true, [
-    [3, 3, 0],
-    [0, 3, 3],
-  ]],
-  ['darkblue', true, [
-    [0, 4, 4],
-    [4, 4, 0],
-  ]],
-  ['darkgreen', true, [
-    [5, 5, 5],
-    [5, 0, 0],
-  ]],
-  ['green', true, [
-    [6, 6, 6],
-    [0, 0, 6],
-  ]],
-  ['purple', true, [
-    [7, 7, 7, 7],
-  ]],
-];
-var blockDict = {
-  0: ['white', false, []],
-  1: ['pink', true, [
-    [1, 1],
-    [1, 1],
-  ]],
-  2: ['red', true, [
-    [0, 1, 0],
-    [1, 1, 1],
-  ]],
-  3: ['blue', true, [
-    [1, 1, 0],
-    [0, 1, 1],
-  ]],
-  4: ['darkblue', true, [
-    [0, 1, 1],
-    [1, 1, 0],
-  ]],
-  5: ['darkgreen', true, [
-    [1, 1, 1],
-    [1, 0, 0],
-  ]],
-  6: ['green', true, [
-    [1, 1, 1],
-    [0, 0, 1],
-  ]],
-  7: ['purple', true, [
-    [1, 1, 1, 1],
-  ]],
-  11: ['pink', false, []],
-  12: ['red', false, []],
-  13: ['blue', false, []],
-  14: ['darkblue', false, []],
-  15: ['darkgreen', false, []],
-  16: ['green', false, []],
-  17: ['purple', false, []],
-}
 var tetrisData = [];
-var stopDown = false;
+var currentBlock;
+var nextBlock;
+var currentTopLeft = [0, 3];
+var blocks = [
+  {
+    name: 's',
+    center: false,
+    numCode: 1,
+    color: 'pink',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0],
+        [0, 1, 1],
+        [0, 1, 1],
+      ]
+    ],
+  },
+  {
+    name: 't',
+    center: true,
+    numCode: 2,
+    color: 'red',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0],
+        [1, 1, 1],
+        [0, 1, 0],
+      ],
+      [
+        [0, 1, 0],
+        [1, 1, 0],
+        [0, 1, 0],
+      ],
+      [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0],
+      ],
+      [
+        [0, 1, 0],
+        [0, 1, 1],
+        [0, 1, 0],
+      ],
+    ],
+  },
+  {
+    name: 'z',
+    center: true,
+    numCode: 3,
+    color: 'blue',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0],
+        [1, 1, 0],
+        [0, 1, 1],
+      ],
+      [
+        [0, 1, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+      ],
+      [
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0],
+      ],
+      [
+        [0, 0, 1],
+        [0, 1, 1],
+        [0, 1, 0],
+      ],
+    ],
+  },
+  {
+    name: 'zr',
+    center: true,
+    numCode: 4,
+    color: 'darkblue',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0],
+        [0, 1, 1],
+        [1, 1, 0],
+      ],
+      [
+        [1, 0, 0],
+        [1, 1, 0],
+        [0, 1, 0],
+      ],
+      [
+        [0, 1, 1],
+        [1, 1, 0],
+        [0, 0, 0],
+      ],
+      [
+        [0, 1, 0],
+        [0, 1, 1],
+        [0, 0, 1],
+      ],
+    ],
+  },
+  {
+    name: 'l',
+    center: true,
+    numCode: 5,
+    color: 'darkgreen',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0],
+        [1, 1, 1],
+        [1, 0, 0],
+      ],
+      [
+        [1, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+      ],
+      [
+        [0, 0, 1],
+        [1, 1, 1],
+        [0, 0, 0],
+      ],
+      [
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 1, 1],
+      ],
+    ],
+  },
+  {
+    name: 'lr',
+    center: true,
+    numCode: 6,
+    color: 'green',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0],
+        [1, 1, 1],
+        [0, 0, 1],
+      ],
+      [
+        [0, 1, 0],
+        [0, 1, 0],
+        [1, 1, 0],
+      ],
+      [
+        [1, 0, 0],
+        [1, 1, 1],
+        [0, 0, 0],
+      ],
+      [
+        [0, 1, 1],
+        [0, 1, 0],
+        [0, 1, 0],
+      ],
+    ],
+  },
+  {
+    name: 'b',
+    center: true,
+    numCode: 7,
+    color: 'purple',
+    currentShapeIndex: 0,
+    shape: [
+      [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [1, 1, 1, 1],
+        [0, 0, 0, 0],
+      ],
+      [
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+      ],
+      [
+        [0, 0, 0, 0],
+        [1, 1, 1, 1],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+      ],
+    ],
+  },
+]
 
-function createBox () {
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < 20; i++) {
-    var tr = document.createElement('tr');
-    var arr = [];
-    tetrisData.push(arr);
+const colors = ['pink', 'red', 'blue', 'darkblue', 'darkgreen', 'green', 'purplr']
+const isActiveBlock = value => (value > 0 && value < 10);
+const isInvalidBlock = value => (value === undefined || value >= 10);
+
+function init() {
+  const fragment = document.createDocumentFragment();
+  [...Array(20).keys()].forEach((col, i) => {
+    const tr = document.createElement('tr');
     fragment.appendChild(tr);
-    for (var j = 0; j < 10; j++) {
-      var td = document.createElement('td');
+    [...Array(10).keys()].forEach((row, j) => {
+      const td = document.createElement('td');
       tr.appendChild(td);
-      arr.push(0);
-    }
-  }
-  console.log(tetrisData);
+    });
+    const column = Array(10).fill(0);
+    tetrisData.push(column);
+  });
   tetris.appendChild(fragment);
 }
 
-function paintDisplay() {
-  tetrisData.forEach(function(tr, i) {
-    tr.forEach(function(td, j) {
-      tetris.children[i].children[j].className = blockDict[td][0];
-    });
-  });
-}
-
-function createBlock() {
-  stopDown = false;
-  var block = blockArr[Math.floor(Math.random() * 7)][2];
-  console.log(block);
-  block.forEach(function(tr, i) {
-    tr.forEach(function(td, j) {
-      tetrisData[i][j + 3] = td;
-    });
-  });
-  paintDisplay();
-}
-
-function downBlock() {
-  for (var i = tetrisData.length - 1; i >= 0; i--) {
-    tetrisData[i].forEach(function(td, j) {
-      if (td > 0 && td < 10) {
-        if (tetrisData[i+1] && !stopDown) {
-          tetrisData[i+1][j] = td;
-          tetrisData[i][j] = 0;
-        } else {
-          stopDown = true;
-          tetrisData[i][j] = td + 10;
-        }
+function draw() {
+  tetrisData.forEach((col, i) => {
+    col.forEach((row, j) => {
+      if (row > 0) {
+        tetris.children[i].children[j].className = tetrisData[i][j] >= 10 ? colors[tetrisData[i][j] / 10 -1]: colors[tetrisData[i][j] -1]
+      } else {
+        tetris.children[i].children[j].className = '';
       }
     });
-  }
-  if (stopDown) {
-    createBlock();
-  }
-  paintDisplay();
+  });
 }
 
-window.addEventListener('keydown', function(event) {
-  switch (event.code) {
-    case 'ArrowRight':
-      break;
-    case 'ArrowLeft':
-      break;
-    case 'ArrowDown':
-      break;
-    default:
-      break;
-  }
-});
+function drawNext() {
+  const nextTable = document.getElementById('next-table');
+  nextTable.querySelectorAll('tr').forEach((col, i) => {
+    Array.from(col.children).forEach((row, j) => {
+      if (nextBlock.shape[0][i] && nextBlock.shape[0][i][j] > 0) {
+        nextTable.querySelectorAll('tr')[i].children[j].className = colors[nextBlock.numCode - 1];
+      } else {
+        nextTable.querySelectorAll('tr')[i].children[j].className = 'white';
+      }
+    });
+  });
+}
 
-window.addEventListener('keyup', function(event) {
-  switch (event.code) {
-    case 'Spaece':
-      break;
-    case 'ArrowUp':
-      break;
+function generate() {
+  if (!currentBlock) {
+    currentBlock = blocks[Math.floor(Math.random() * blocks.length)];
+  } else {
+    currentBlock = nextBlock;
   }
-});
+  currentBlock.currentShapeIndex = 0;
+  nextBlock = blocks[Math.floor(Math.random() * blocks.length)];
+  drawNext();
+  currentTopLeft = [-1, 3];
+  let isGameOver = false;
+  currentBlock.shape[0].slice(1).forEach((col, i) => {
+    col.forEach((row, j) => {
+      if (row && tetrisData[i][j+3]) {
+        isGameOver = true;
+      }
+    });
+  });
+  currentBlock.shape[0].slice(1).forEach((col, i) => {
+    col.forEach((row, j) => {
+      if (row) {
+        tetrisData[i][j+3] = currentBlock.numCode;
+      }
+    });
+  });
+  if (isGameOver) {
+    clearInterval(int);
+    draw();
+    alert('GameOver');    
+  } else {
+    draw();
+  }
+}
 
-createBox();
-createBlock();
-setInterval(downBlock, 100)
+function checkrows() {
+  const fullRows = [];
+  tetrisData.forEach((col, i) => {
+    let count = 0;
+    col.forEach((row, j) => {
+      if (row > 0) {
+        count++;
+      }
+    });
+    if (count === 10) {
+      fullRows.push(i);
+    }
+  });
+  const fullRowsCount = fullRows.length;
+  tetrisData = tetrisData.filter((row, i) => !fullRows.includes(i));
+  for (let i = 0; i < fullRowsCount; i++) {
+    tetrisData.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  }
+  let score = parseInt(document.getElementById('score').textContent, 10);
+  score += fullRows ** 2;
+  document.getElementById('score').textContent = String(score);
+}
+
+function tick() {
+  const nextTopLeft = [currentTopLeft[0] + 1, currentTopLeft[1]];
+  const activeBlock = [];
+  let canGoDown = true;
+  let currentBlockShape = currentBlock.shape[currentBlock.currentShapeIndex];
+  for (let i = currentTopLeft[0]; i < currentTopLeft[0] + currentBlockShape.length; i++) {
+    if (i < 0 || i >= 20) continue;
+    for (let j = currentTopLeft; j < currentTopLeft[1] + currentBlockShape.length; j++) {
+      if (isActiveBlock(tetrisData[i][j])) {
+        activeBlock.push([i, j]);
+        if (isInvalidBlock(tetrisData[i+1] && tetrisData[i +1][j])) {
+          canGoDown = false;
+        }
+      }
+    }
+  }
+  if (!canGoDown) {
+    activeBlock.forEach((blocks) => {
+      tetrisData[blocks[0]][blocks[1]] += 10;
+    });
+    checkRows();
+    generate();
+    return false;
+  } else if (canGoDown) {
+    for (let i = tetrisData.length - 1; i >= 0; i--) {
+      const col = tetrisData[i];
+      col.forEach((row, j) => {
+        if (row < 10 && tetrisData[i+1] && tetrisData[i+1][j] < 10) {
+          tetrisData[i+1][j] =row;
+          tetrisData[i][j] = 0;
+        }
+      });
+    }
+    currentTopLeft = nextTopLeft;
+    draw();
+    return true;
+  }
+}
+
+let int = setInterval(tick, 2000);
+
+init();
+generate();
+
+
+
+
+
+
+
+
+
+
+
+
