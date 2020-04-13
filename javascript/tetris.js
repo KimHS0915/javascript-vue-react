@@ -295,7 +295,7 @@ function checkRows() {
     tetrisData.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   }
   let score = parseInt(document.getElementById('score').textContent, 10);
-  score += fullRows ** 2;
+  score += fullRowsCount ** 2;
   document.getElementById('score').textContent = String(score);
 }
 
