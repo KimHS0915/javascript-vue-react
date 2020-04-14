@@ -270,7 +270,7 @@ function generate() {
   if (isGameOver) {
     clearInterval(int);
     draw();
-    alert('GameOver');    
+    alert('GameOver');   
   } else {
     draw();
   }
@@ -341,6 +341,16 @@ function tick() {
 let int = setInterval(tick, 1000);
 init();
 generate();
+
+document.getElementById('stop').addEventListener('click', function() {
+  clearInterval(int);
+});
+document.getElementById('start').addEventListener('click', function() {
+  if (int) {
+    clearInterval(int);
+  }
+  int = setInterval(tick, 1000);
+});
 
 window.addEventListener('keydown', (event) => {
   switch (event.code) {
