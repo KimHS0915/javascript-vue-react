@@ -1,0 +1,48 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewpport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Multiplication Table</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <div>{{ firstNum }} X {{ secondNum }} = ?</div>
+        <br>
+        <form v-on:submit="onSubmitForm">
+            <input type="number" ref="answer" v-model="value">
+            <button type="submit">input</button>
+        </form>
+        <div id="result">{{ result }}</div>
+    </div>
+    <script>
+        const app = new Vue({
+            el: '#root',
+            data: {
+                firstNum: Math.ceil(Math.random() * 9),
+                secondNum: Math.ceil(Math.random() * 9),
+                value: '',
+                result: '',
+            },
+            methods: {
+                onSubmitForm(event) {
+                    event.preventDefault();
+                    if (this.firstNum * this.secondNum === parseInt(this.value)) {
+                        this.result = 'correct';
+                        this.firstNum = Math.ceil(Math.random() * 9);
+                        this.secondNum = Math.ceil(Math.random() * 9);
+                        this.value = '';
+                        this.$refs.answer.focus();
+                    } else {
+                        this.result = 'incorrect';
+                        this.value = '';
+                        this.$refs.answer.focus();
+                    }
+                }
+            },
+        });
+</script>
+</body>
+</html>
