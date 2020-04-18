@@ -23,7 +23,6 @@ const getNumbers = () => {
     const chosen = candidates.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
     array.push(chosen);
   }
-  console.log(array);
   return array;
 };
 
@@ -43,14 +42,14 @@ export default {
         this.value = '';
         this.answer = getNumbers();
         this.tries = [];
-        this.tryOrTries = 'Try'
+        this.tryOrTries = 'Try';
         this.$refs.answer.focus();
       } else if (this.tries.length >= 9) {
         alert(`You Lose!, Answer is ${this.answer.join('')}`);
         this.value = '';
         this.answer = getNumbers();
         this.tries = [];
-        this.tryOrTries = 'Try'
+        this.tryOrTries = 'Try';
         this.$refs.answer.focus();
       } else {
         let bulls = 0;
@@ -68,7 +67,7 @@ export default {
           result: `bulls : ${bulls}, cows : ${cows}`
         });
         if (this.tries.length > 1) {
-          this.tryOrTries = 'Tries'
+          this.tryOrTries = 'Tries';
         }
         this.value = '';
         this.$refs.answer.focus();
