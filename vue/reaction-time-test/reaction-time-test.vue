@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="screen" v-bind:class="state">{{ message }}</div>
+    <div id="screen" :class="state" @click="onClickScreen">{{ message }}</div>
     <div>
       <div>Average Time : </div>
       <button @click="onReset">Reset</button>
@@ -17,9 +17,18 @@ export default {
       message: 'Click anywhere to start',
     };
   },
-  method: {
+  methods: {
     onReset() {
-      
+
+    },
+    onClickScreen() {
+      if (this.state === 'waiting') {
+        this.state = 'ready';
+      } else if (this.state === 'ready') {
+        this.state = 'now';        
+      } else if (this.state === 'now') {
+        this.state = 'waiting';
+      }
     },
   },
 };
