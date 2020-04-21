@@ -46,6 +46,17 @@ export default {
     },
   },
   methods: {
+    repeatRockPaperScissors() {
+      interval = setInterval(() => {
+        if (this.imgCoord === coords.rock) {
+          this.imgCoord = coords.paper;
+        } else if (this.imgCoord === coords.paper) {
+          this.imgCoord = coords.scissors;
+        } else if (this.imgCoord === coords.scissors) {
+          this.imgCoord = coords.rock;
+        }
+      }, 100);
+    },
     onClickButton(choice) {
       clearInterval(interval);
       const score = scoreboard[choice] - scoreboard[comChoice(this.imgCoord)];
@@ -60,28 +71,12 @@ export default {
         this.lose += 1
       }
       setTimeout(() => {
-        interval = setInterval(() => {
-      if (this.imgCoord === coords.rock) {
-        this.imgCoord = coords.paper; 
-      } else if (this.imgCoord === coords.paper) {
-        this.imgCoord = coords.scissors;
-      } else if (this.imgCoord === coords.scissors) {
-        this.imgCoord = coords.rock;
-      }
-    }, 100);
+        this.repeatRockPaperScissors();
       }, 1000);
     }
   },
   mounted() {
-    interval = setInterval(() => {
-      if (this.imgCoord === coords.rock) {
-        this.imgCoord = coords.paper; 
-      } else if (this.imgCoord === coords.paper) {
-        this.imgCoord = coords.scissors;
-      } else if (this.imgCoord === coords.scissors) {
-        this.imgCoord = coords.rock;
-      }
-    }, 100);
+    this.repeatRockPaperScissors();
   },
   beforeDestroy() {
     clearInterval(interval);
