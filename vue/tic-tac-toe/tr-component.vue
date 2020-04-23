@@ -9,7 +9,7 @@ import TdComponent from './td-component';
 
 export default {
   components: {
-    TdComponent,
+    'td-component': TdComponent,
   },
   props: {
     rowData: Array,

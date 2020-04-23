@@ -8,11 +8,11 @@
 import TrComponent from './tr-component';
 
 export default {
+  components: {
+    'tr-component': TrComponent,
+  },
   props: {
     tableData: Array,
-  },
-  components: {
-    TrComponent,
   },
 };
 </script>
