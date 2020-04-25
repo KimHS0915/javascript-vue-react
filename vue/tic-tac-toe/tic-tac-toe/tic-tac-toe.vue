@@ -1,5 +1,8 @@
 <template>
+<div>
+  <div>{{ turn }}'s turn</div>
   <table-component :table-data="tableData" />
+</div>
 </template>
 
 <script>
@@ -17,10 +20,8 @@ export default {
         ['', '', ''],
       ],
       turn: 'O',
+      winner: '',
     };
-  },
-  methods: {
-
   },
 };
 </script>
