@@ -14,6 +14,11 @@ export default {
   components: {
     'table-component': TableComponent,
   },
+  computed: {
+    turn() {
+      return this.$store.state.turn;
+    },
+  },
 };
 </script>
 
