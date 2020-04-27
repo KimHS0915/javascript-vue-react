@@ -1,20 +1,24 @@
 <template>
 <div>
   <div>{{ turn }}'s turn</div>
-  <table>
-    <tr v-for="(rowData, rowIndex) in tableData" :key="rowIndex">
-      <td @click="onClickTd(rowIndex, cellIndex)" v-for="(cellData, cellIndex) in rowData" :key="cellIndex">{{ cellData }}</td>
+  <table-component>
+    <tr v-for="(rowData, rowIndex) in tableData" :key="rowIndex + Math.random()">
+      <td @click="onClickTd(rowIndex, cellIndex)" v-for="(cellData, cellIndex) in rowData" :key="cellIndex + Math.random()">{{ cellData }}</td>
     </tr>
-  </table>
+  </table-component>
 </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import store, { CHANGE_TURN, CLICK_CELL, NO_WINNER, RESET_GAME, SET_WINNER } from './store';
+import TableComponent from './table-component';
 
 export default {
   store,
+  components: {
+    'table-component': TableComponent,
+  },
   computed: {
     ...mapState(['winner', 'turn', 'tableData'])
   },
