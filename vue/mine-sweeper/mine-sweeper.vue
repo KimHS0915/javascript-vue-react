@@ -11,11 +11,13 @@
 import { mapState } from 'vuex';
 import store from './store';
 import TableComponent from './table-component';
+import MineForm from './mine-form';
 
 export default {
   store,
   components: {
     'table-component': TableComponent,
+    'mine-form': MineForm,
   },
   computed: {
     ...mapState(['timer', 'result'])
@@ -32,9 +34,9 @@ table {
 }
 td {
   border: 1px solid black;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   text-align: center;
-  font-size: 50px;
+  font-size: 30px;
 }
 </style>

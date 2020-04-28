@@ -11,6 +11,41 @@ export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
 export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
+export const CODE = {
+  OPEN_BOX: -1,
+  QUESTION: -2,
+  FLAG: -3,
+  FLAG_MINE: -4,
+  QUESTION_MINE: -5,
+  NORMAL_BOX: 0,
+  MINE: 1,
+}
+
+const plantMine = (row, cell, mine) => {
+  const candidate = Array(row * cell).fill().map((arr, i) => {
+    return i;
+  });
+  const shuffle = [];
+  while (candidate.length > row * cell - mine) {
+    const chosen = candidate.splice(Math.floor(Math.random() * candidate.length), 1)[0];
+    shuffle.push(chosen);
+  }
+  const data = [];
+  for (let i = 0; i < row; i++) {
+    const rowData = [];
+    data.push(rowData);
+    for (let j = 0; j < cell; j++) {
+      rowData.push(CODE.NORMAL_BOX);
+    }
+  }
+  for (let k = 0; k < shuffle.length; k++) {
+    const ver = Math.floor(shuffle[k] / cell);
+    const hor = shuffle[k] % cell;
+    data[ver][hor] = CODE.MINE;
+  }
+  return data;
+}
+
 export default new Vuex.Store({
   state: {
     tableData: [],
@@ -23,7 +58,15 @@ export default new Vuex.Store({
     result: '',
   },
   mutations: {
-    [START_GAME](state, { row, cell, mine }) {},
+    [START_GAME](state, { row, cell, mine }) {
+      state.data = {
+        row,
+        cell,
+        mine,
+      };
+      state.tableData = plantMine(row, cell, mine);
+      state.timer = 0;
+    },
     [OPEN_CELL](state) {},
     [CLICK_MINE](state) {},
     [FLAG_CELL](state) {},
