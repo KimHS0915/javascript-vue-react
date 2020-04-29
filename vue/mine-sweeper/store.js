@@ -56,6 +56,7 @@ export default new Vuex.Store({
       mine: 0,
     },
     timer: 0,
+    pause: true,
     result: '',
   },
   mutations: {
@@ -67,12 +68,15 @@ export default new Vuex.Store({
       };
       state.tableData = plantMine(row, cell, mine);
       state.timer = 0;
+      state.pause = false;
     },
     [OPEN_CELL](state) {},
     [CLICK_MINE](state) {},
     [FLAG_CELL](state) {},
     [QUESTION_CELL](state) {},
     [NORMALIZE_CELL](state) {},
-    [INCREMENT_TIMER](state) {},
+    [INCREMENT_TIMER](state) {
+      state.timer += 1;
+    },
   },
 });
