@@ -1,43 +1,43 @@
 <template>
   <table>
     <tr v-for="(rowData, rowIndex) in tableData" :key="rowIndex">
-      <td v-for="(cellData, cellIndex) in rowData" :key="cellIndex" :style="cellDataStyle(rowIndex, cellIndex)">{{ cellDataText(rowIndex, cellIndex) }}</td>
+      <td v-for="(cellData, cellIndex) in rowData" :key="cellIndex" :style="cellDataStyle(rowIndex, cellIndex)" @click="onLeftClickTd(rowIndex, cellIndex)" @contextmenu.prevent="onRightClickTd(rowIndex, cellIndex)">{{ cellDataText(rowIndex, cellIndex) }}</td>
     </tr>
   </table>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { CODE } from './store';
+import { CODE, OPEN_CELL, QUESTION_CELL, NORMALIZE_CELL, FLAG_CELL } from './store';
 
 export default {
   computed: {
-    ...mapState(['tableData']),
+    ...mapState(['tableData', 'pause']),
     cellDataStyle(state) {
       return (row, cell) => {
         switch (this.$store.state.tableData[row][cell]) {
           case CODE.NORMAL_BOX:
-        case CODE.MINE:
-          return {
-            background: '#444',
-          };
-        case CODE.CLICKED_MINE:
-        case CODE.OPEN_BOX:
-          return {
-            background: 'white',
-          };
-        case CODE.FLAG:
-        case CODE.FLAG_MINE:
-          return {
-            background: 'red',
-          };
-        case CODE.QUESTION:
-        case CODE.QUESTION_MINE:
-          return {
-            background: 'orange',
-          }
-        default:
-          return {};
+          case CODE.MINE:
+            return {
+              background: '#444',
+            };
+          case CODE.CLICKED_MINE:
+          case CODE.OPEN_BOX:
+            return {
+              background: 'white',
+            };
+          case CODE.FLAG:
+          case CODE.FLAG_MINE:
+            return {
+              background: 'red',
+            };
+          case CODE.QUESTION:
+          case CODE.QUESTION_MINE:
+            return {
+              background: 'orange',
+            }
+          default:
+            return {};
         }
       }
     },
@@ -61,6 +61,37 @@ export default {
         }
       }
     },
-  }
+  },
+  methods: {
+    onLeftClickTd(row, cell) {
+      console.log(this.tableData[row][cell]);
+      if (this.pause) {
+        return;
+      }
+      this.$store.commit(OPEN_CELL, { row, cell });
+    },
+    onRightClickTd(row, cell) {
+      console.log(this.tableData[row][cell]);
+      if (this.pause) {
+        return;
+      }
+      switch (this.tableData[row][cell]) {
+        case CODE.NORMAL_BOX:
+        case CODE.MINE:
+          this.$store.commit(FLAG_CELL, { row, cell });
+          return;
+        case CODE.FLAG:
+        case CODE.FLAG_MINE:
+          this.$store.commit(QUESTION_CELL, { row, cell });
+          return;
+        case CODE.QUESTION:
+        case CODE.QUESTION_MINE:
+          this.$store.commit(NORMALIZE_CELL, { row, cell });
+          return;
+        default:
+          return;
+      }
+    }
+  },
 };
 </script>

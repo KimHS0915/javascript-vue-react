@@ -70,11 +70,31 @@ export default new Vuex.Store({
       state.timer = 0;
       state.pause = false;
     },
-    [OPEN_CELL](state) {},
+    [OPEN_CELL](state, { row, cell }) {
+      Vue.set(state.tableData[row], cell, CODE.OPEN_BOX);
+    },
     [CLICK_MINE](state) {},
-    [FLAG_CELL](state) {},
-    [QUESTION_CELL](state) {},
-    [NORMALIZE_CELL](state) {},
+    [FLAG_CELL](state, { row, cell }) {
+      if (state.tableData[row][cell] === CODE.MINE) {
+        Vue.set(state.tableData[row], cell, CODE.FLAG_MINE);
+      } else {
+        Vue.set(state.tableData[row], cell, CODE.FLAG);
+      }
+    },
+    [QUESTION_CELL](state, { row, cell }) {
+      if (state.tableData[row][cell] === CODE.FLAG_MINE) {
+        Vue.set(state.tableData[row], cell, CODE.QUESTION_MINE);
+      } else {
+        Vue.set(state.tableData[row], cell, CODE.QUESTION);
+      }
+    },
+    [NORMALIZE_CELL](state, { row, cell }) {
+      if (state.tableData[row][cell] === CODE.QUESTION_MINE) {
+        Vue.set(state.tableData[row], cell, CODE.MINE);
+      } else {
+        Vue.set(state.tableData[row], cell, CODE.NORMAL_BOX);
+      }
+    },
     [INCREMENT_TIMER](state) {
       state.timer += 1;
     },
