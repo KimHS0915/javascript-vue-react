@@ -17,6 +17,7 @@ export const CODE = {
   FLAG: -3,
   FLAG_MINE: -4,
   QUESTION_MINE: -5,
+  CLICKED_MINE: -6,
   NORMAL_BOX: 0,
   MINE: 1,
 }
