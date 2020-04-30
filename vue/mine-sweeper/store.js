@@ -71,7 +71,19 @@ export default new Vuex.Store({
       state.pause = false;
     },
     [OPEN_CELL](state, { row, cell }) {
-      function checkAround() {
+      const checked = [];
+      function checkAround(row, cell) {
+        if (row < 0 || row >= state.tableData.length || cell < 0 || cell >= state.tableData[0].length) {
+          return;
+        }
+        if ([CODE.OPEN_BOX, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(state.tableData[row][cell])) {
+          return;
+        }
+        if (checked.includes(row + '/' + cell)) {
+          return;
+        } else {
+          checked.push(row + '/' + cell);
+        }
         let around = [];
         if (state.tableData[row-1]) {
           around = around.concat([
@@ -89,10 +101,29 @@ export default new Vuex.Store({
         const counted = around.filter(function(v) {
           return [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v);
         });
-        return counted.length;
+        if (counted.length === 0 && row > -1) {
+          const near = [];
+          if (row - 1 > -1) {
+            near.push([row-1, cell-1]);
+            near.push([row-1, cell]);
+            near.push([row-1, cell+1]);
+          }
+          near.push([row, cell-1]);
+          near.push([row, cell+1]);
+          if (row + 1 < state.tableData.length) {
+            near.push([row+1, cell-1]);
+            near.push([row+1, cell]);
+            near.push([row+1, cell+1]);
+          }
+          near.forEach((n) => {
+            if (state.tableData[[n[0]][n[1]]] !== CODE.OPEN_BOX) {
+              checkAround(n[0], n[1]);
+            }
+          });
+        }
+        Vue.set(state.tableData[row], cell, counted.length);
       }
-      const mineCount = checkAround();
-      Vue.set(state.tableData[row], cell, mineCount);
+      checkAround(row, cell);
     },
     [CLICK_MINE](state, { row, cell }) {
       state.pause = true;
