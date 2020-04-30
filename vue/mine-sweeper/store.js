@@ -58,6 +58,7 @@ export default new Vuex.Store({
     timer: 0,
     pause: true,
     result: '',
+    countOpenBox: 0,
   },
   mutations: {
     [START_GAME](state, { row, cell, mine }) {
@@ -69,8 +70,11 @@ export default new Vuex.Store({
       state.tableData = plantMine(row, cell, mine);
       state.timer = 0;
       state.pause = false;
+      state.result = '';
+      state.countOpenBox = 0;
     },
     [OPEN_CELL](state, { row, cell }) {
+      let countOpenBox = 0;
       const checked = [];
       function checkAround(row, cell) {
         if (row < 0 || row >= state.tableData.length || cell < 0 || cell >= state.tableData[0].length) {
@@ -121,9 +125,21 @@ export default new Vuex.Store({
             }
           });
         }
+        if (state.tableData[row][cell] === CODE.NORMAL_BOX) {
+          countOpenBox += 1;
+        }
         Vue.set(state.tableData[row], cell, counted.length);
       }
       checkAround(row, cell);
+      let pause = false;
+      let result = '';
+      if (state.data.row * state.data.cell - state.data.mine === state.countOpenBox + countOpenBox) {
+        pause = true;
+        result = 'You Win!';
+      }
+      state.countOpenBox += countOpenBox;
+      state.pause = pause;
+      state.result = result;
     },
     [CLICK_MINE](state, { row, cell }) {
       state.pause = true;
