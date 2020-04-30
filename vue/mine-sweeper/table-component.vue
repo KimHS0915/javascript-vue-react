@@ -8,7 +8,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { CODE, OPEN_CELL, QUESTION_CELL, NORMALIZE_CELL, FLAG_CELL } from './store';
+import { CODE, OPEN_CELL, QUESTION_CELL, NORMALIZE_CELL, FLAG_CELL, CLICK_MINE } from './store';
 
 export default {
   computed: {
@@ -57,21 +57,26 @@ export default {
           case CODE.CLICKED_MINE:
             return 'B';
           default:
-            return '';
+            return this.$store.state.tableData[row][cell] || '';
         }
       }
     },
   },
   methods: {
     onLeftClickTd(row, cell) {
-      console.log(this.tableData[row][cell]);
       if (this.pause) {
         return;
       }
-      this.$store.commit(OPEN_CELL, { row, cell });
+      switch (this.tableData[row][cell]) {
+        case CODE.NORMAL_BOX:
+          return this.$store.commit(OPEN_CELL, { row, cell });
+        case CODE.MINE:
+          return this.$store.commit(CLICK_MINE, { row, cell });
+        default:
+          return;
+      }
     },
     onRightClickTd(row, cell) {
-      console.log(this.tableData[row][cell]);
       if (this.pause) {
         return;
       }

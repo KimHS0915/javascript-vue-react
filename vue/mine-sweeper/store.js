@@ -12,14 +12,14 @@ export const NORMALIZE_CELL = 'NORMALIZE_CELL';
 export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 export const CODE = {
-  OPEN_BOX: -1,
-  QUESTION: -2,
-  FLAG: -3,
-  FLAG_MINE: -4,
-  QUESTION_MINE: -5,
-  CLICKED_MINE: -6,
-  NORMAL_BOX: 0,
-  MINE: 1,
+  OPEN_BOX: 'OPEN_BOX',
+  QUESTION: 'QUESTION',
+  FLAG: 'FLAG',
+  FLAG_MINE: 'FLAG_MINE',
+  QUESTION_MINE: 'QUESTION_MINE',
+  CLICKED_MINE: 'CLICKED_MINE',
+  NORMAL_BOX: 'NORMAL_BOX',
+  MINE: 'MINE',
 }
 
 const plantMine = (row, cell, mine) => {
@@ -71,9 +71,33 @@ export default new Vuex.Store({
       state.pause = false;
     },
     [OPEN_CELL](state, { row, cell }) {
-      Vue.set(state.tableData[row], cell, CODE.OPEN_BOX);
+      function checkAround() {
+        let around = [];
+        if (state.tableData[row-1]) {
+          around = around.concat([
+            state.tableData[row-1][cell-1], state.tableData[row-1][cell], state.tableData[row-1][cell+1]
+          ]);
+        }
+        around = around.concat([
+          state.tableData[row][cell-1], state.tableData[row][cell+1]
+        ]);
+        if (state.tableData[row+1]) {
+          around = around.concat([
+            state.tableData[row+1][cell-1], state.tableData[row+1][cell], state.tableData[row+1][cell+1]
+          ]);
+        }
+        const counted = around.filter(function(v) {
+          return [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v);
+        });
+        return counted.length;
+      }
+      const mineCount = checkAround();
+      Vue.set(state.tableData[row], cell, mineCount);
     },
-    [CLICK_MINE](state) {},
+    [CLICK_MINE](state, { row, cell }) {
+      state.pause = true;
+      Vue.set(state.tableData[row], cell, CODE.CLICKED_MINE);
+    },
     [FLAG_CELL](state, { row, cell }) {
       if (state.tableData[row][cell] === CODE.MINE) {
         Vue.set(state.tableData[row], cell, CODE.FLAG_MINE);
