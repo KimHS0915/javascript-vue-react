@@ -4,6 +4,8 @@
     <router-link to="/game/index">Index</router-link>
     <router-link to="/game/bulls-and-cows">Bulls And Cows</router-link>
     <router-link to="/game/reaction-time-test">Reaction Time Test</router-link>
+    <router-link to="/game/lotto-generator">Lotto Generator</router-link>
+    <router-link to="/game/rock-paper-scissors">Rock Paper Scissors</router-link>
   </div>
   <router-view></router-view>
 </div>
@@ -27,5 +29,10 @@ td {
   height: 50px;
   text-align: center;
   font-size: 30px;
+}
+#computer {
+  width: 142px;
+  height: 200px;
+  background-position: 0 0;
 }
 </style>
