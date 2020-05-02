@@ -1,5 +1,11 @@
 <template>
-
+<div>
+  <div>
+    <router-link to="/bulls-and-cows">Bulls And Cows</router-link>
+    <router-link to="/reaction-time-test">Reaction Time Test</router-link>
+  </div>
+  <router-view></router-view>
+</div>
 </template>
 
 <script>

@@ -5,6 +5,7 @@ import ReactionTimeTest from '../reaction-time-test/reaction-time-test';
 Vue.use(VueRouter);
 
 export default new VueRouter({
+  mode: 'history',
   routes: [
     { path: '/bulls-and-cows', component: BullsAndCows },
     { path: '/reaction-time-test', component: ReactionTimeTest },
