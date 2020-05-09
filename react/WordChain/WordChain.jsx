@@ -1,54 +1,41 @@
 const React = require('react');
-const { Component } = React;
+const { useState, useRef } = React;
 
-class WordChain extends Component {
-  state = {
-    word: 'word',
-    value: '',
-    result: '',
-  };
+const WordChain = () => {
+  const [word, setWord] = useState('word');
+  const [value, setValue] = useState('');
+  const [result, setResult] = useState('');
+  const inputRef = useRef(null);
 
-  onSubmitForm = (e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault();
-    if (this.state.word[this.state.word.length-1] === this.state.value[0]) {
-      this.setState({
-        result: 'correct',
-        word: this.state.value,
-        value: '',        
-      });
-      this.input.focus();
+    if (word[word.length-1] === value[0]) {
+      setResult('correct');
+      setWord(value);
+      setValue('');
+      inputRef.current.focus();
     } else {
-      this.setState({
-        result: 'incorrect',
-        value: '',
-      });
-      this.input.focus();
+      setResult('incorrect');
+      setValue('');
+      inputRef.current.focus();
     }
   };
 
-  onChangeInput = (e) => {
-    this.setState({ value: e.currentTarget.value });
+  const onChangeInput = (e) => {
+    setValue(e.currentTarget.value);
   };
-
-  input;
-
-  onRefInput = (c) => {
-    this.input = c;
-  };
-
-  render() {
-    return (
+  
+  return (
     <>
-      <div>{this.state.word}</div>
+      <div>{word}</div>
       <br></br>
-      <form onSubmit={this.onSubmitForm}>
-        <input ref={this.onRefInput} value={this.state.value} onChange={this.onChangeInput} />
+      <form onSubmit={onSubmitForm}>
+        <input ref={inputRef} value={value} onChange={onChangeInput} />
         <button>input</button>
       </form>
-      <div>{this.state.result}</div>
+      <div>{result}</div>
     </>
     );
-  }
 }
 
 module.exports = WordChain;
