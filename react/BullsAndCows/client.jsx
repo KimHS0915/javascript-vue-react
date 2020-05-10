@@ -1,6 +1,9 @@
 const React = require('react');
 const ReactDom = require('react-dom');
+const { hot } = require('react-hot-loader/root');
 
 const BullsAndCows = require('./BullsAndCows');
 
-ReactDom.render(<BullsAndCows />, document.querySelector('#root'));
+const Hot = hot(BullsAndCows);
+
+ReactDom.render(<Hot />, document.querySelector('#root'));
