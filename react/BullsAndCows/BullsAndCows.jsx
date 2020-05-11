@@ -82,6 +82,13 @@ class BullsAndCows extends Component {
           <button type="submit">input</button>
         </form>
         <div>{tryOrTries} : {this.state.tries.length}</div>
+        <ul>
+          {this.state.tries.map((t, idx) => {
+            return (
+              <li key={idx+t.try}>{t.try}, {t.result}</li>              
+            );
+          })}
+        </ul>
       </>
     );
   }
