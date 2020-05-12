@@ -65,10 +65,11 @@ class BullsAndCows extends Component {
   inputRef = createRef();
 
   render() {
-    const tries = this.state.tries.length;
+    const { value, tries } = this.state;
+    const triesLen = tries.length;
     let tryOrTries;
 
-    if (tries > 1) {
+    if (triesLen > 1) {
       tryOrTries = 'Tries'
     } else {
       tryOrTries = 'Try';
@@ -76,14 +77,13 @@ class BullsAndCows extends Component {
     
     return (
       <>
-        <h1>{this.state.result}</h1>
         <form onSubmit={this.onSubmitForm}>
-          <input ref={this.inputRef} maxLength={4} value={this.state.value} onChange={this.onChangeInput} />
+          <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput} />
           <button type="submit">input</button>
         </form>
-        <div>{tryOrTries} : {this.state.tries.length}</div>
+        <div>{tryOrTries} : {triesLen}</div>
         <ul>
-          {this.state.tries.map((t, idx) => {
+          {tries.map((t, idx) => {
             return (
               <li key={idx+t.try}>{t.try}, {t.result}</li>              
             );
