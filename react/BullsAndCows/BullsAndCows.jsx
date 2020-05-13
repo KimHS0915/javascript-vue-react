@@ -1,5 +1,6 @@
 const React = require('react');
 const { Component, createRef } = React;
+const TryAndResult = require('./TryAndResult');
 
 const getNumbers = () => {
   const candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -81,11 +82,11 @@ class BullsAndCows extends Component {
           <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput} />
           <button type="submit">input</button>
         </form>
-        <div>{tryOrTries} : {triesLen}</div>
+        <div>{tryOrTries} : {triesLen} / 10</div>
         <ul>
           {tries.map((t, idx) => {
             return (
-              <li key={idx+t.try}>{t.try}, {t.result}</li>              
+              <TryAndResult key={idx} try={t.try} result={t.result} />
             );
           })}
         </ul>
