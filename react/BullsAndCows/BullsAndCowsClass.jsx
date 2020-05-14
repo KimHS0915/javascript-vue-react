@@ -1,6 +1,6 @@
 const React = require('react');
 const { Component, createRef } = React;
-const TryAndResult = require('./TryAndResult');
+const TryAndResult = require('./TryAndResultClass');
 
 const getNumbers = () => {
   const candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -12,6 +12,14 @@ const getNumbers = () => {
   return array;
 };
 
+const reset = () => {
+  return {
+    value: '',
+    answer: getNumbers(),
+    tries: [],
+  }
+};
+
 class BullsAndCows extends Component {
   state = {
     value: '',
@@ -20,37 +28,30 @@ class BullsAndCows extends Component {
   };
 
   onSubmitForm = (e) => {
+    const { value, answer, tries } = this.state;
     e.preventDefault();
-    if (this.state.value === this.state.answer.join('')) {
-      alert(`Answer is ${this.state.answer.join('')}, You Win!`)
-      this.setState({
-        value: '',
-        answer: getNumbers(),
-        tries: [],
-      });
+    if (value === answer.join('')) {
+      alert(`Answer is ${answer.join('')}, You Win!`);
+      this.setState(reset);
       this.inputRef.current.focus();
-    } else if (this.state.tries.length >= 9) {
-      alert(`You Lose!, Answer is ${this.state.answer.join('')}`);
-      this.setState({
-        value: '',
-        answer: getNumbers(),
-        tries: [],          
-      });
+    } else if (tries.length >= 9) {
+      alert(`You Lose!, Answer is ${answer.join('')}`);
+      this.setState(reset);
       this.inputRef.current.focus();
     } else {
-      const answerArray = this.state.value.split('').map((v) => parseInt(v));
+      const answerArray = value.split('').map((v) => parseInt(v));
       let bulls = 0;
       let cows = 0;
       for (let i = 0; i < 4; i++) {
-        if (answerArray[i] === this.state.answer[i]) {
+        if (answerArray[i] === answer[i]) {
           bulls++;
-        } else if (this.state.answer.includes(answerArray[i])) {
+        } else if (answer.includes(answerArray[i])) {
           cows++;
         }
       }
       this.setState((prevState) => {
         return {
-          tries: [...prevState.tries, {try: this.state.value, result: `bulls : ${bulls}, cows : ${cows}`}], value: '',
+          tries: [...prevState.tries, {try: value, result: `bulls : ${bulls}, cows : ${cows}`}], value: '',
         };
       });
       this.inputRef.current.focus();
@@ -67,11 +68,10 @@ class BullsAndCows extends Component {
 
   render() {
     const { value, tries } = this.state;
-    const triesLen = tries.length;
     let tryOrTries;
 
-    if (triesLen > 1) {
-      tryOrTries = 'Tries'
+    if (tries.length > 1) {
+      tryOrTries = 'Tries';
     } else {
       tryOrTries = 'Try';
     }
@@ -82,7 +82,7 @@ class BullsAndCows extends Component {
           <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput} />
           <button type="submit">input</button>
         </form>
-        <div>{tryOrTries} : {triesLen} / 10</div>
+        <div>{tryOrTries} : {tries.length} / 10</div>
         <ul>
           {tries.map((t, idx) => {
             return (
