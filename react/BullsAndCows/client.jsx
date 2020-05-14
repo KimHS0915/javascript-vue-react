@@ -2,7 +2,7 @@ const React = require('react');
 const ReactDom = require('react-dom');
 const { hot } = require('react-hot-loader/root');
 
-const BullsAndCows = require('./BullsAndCows');
+const BullsAndCows = require('./BullsAndCowsHooks');
 
 const Hot = hot(BullsAndCows);
 
