@@ -1,12 +1,12 @@
 const React = require('react');
-const { Component } = React;
+const { memo } = React;
 
-const TryAndResult = (props) => {
+const TryAndResult = memo((props) => {
   return (
     <li>
       <div>{props.try}, {props.result}</div>
     </li>
   )
-};
+});
 
 module.exports = TryAndResult;

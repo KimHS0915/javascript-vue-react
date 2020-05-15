@@ -1,5 +1,5 @@
 const React = require('react');
-const { useState, useRef } = React;
+const { useState, useRef, memo } = React;
 const TryAndResult = require('./TryAndResultHooks');
 
 const getNumbers = () => {
@@ -12,7 +12,7 @@ const getNumbers = () => {
   return array;
 };
 
-const BullsAndCows = () => {
+const BullsAndCows = memo(() => {
   const [value, setValue] = useState('');
   const [answer, setAnswer] = useState(getNumbers());
   const [tries, setTries] = useState([]);
@@ -79,6 +79,6 @@ const BullsAndCows = () => {
       </ul>
     </>
   );
-};
+});
   
 module.exports = BullsAndCows;

@@ -1,5 +1,5 @@
 const React = require('react');
-const { Component, createRef } = React;
+const { PureComponent, createRef } = React;
 const TryAndResult = require('./TryAndResultClass');
 
 const getNumbers = () => {
@@ -20,7 +20,7 @@ const reset = () => {
   }
 };
 
-class BullsAndCows extends Component {
+class BullsAndCows extends PureComponent {
   state = {
     value: '',
     answer: getNumbers(),
