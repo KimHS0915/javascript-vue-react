@@ -3,15 +3,15 @@
     height: 300px;
     text-align: center;
     user-select: none;
-  }
-  #screen.waiting {
+}
+#screen.waiting {
     background-color: aqua;
-  }
-  #screen.ready {
+}
+#screen.ready {
     background-color: red;
     color: white;
-  }
-  #screen.now {
+}
+#screen.now {
     background-color: green;
     color: white;
-  }
+}
