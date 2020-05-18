@@ -60,10 +60,10 @@ export default {
     onClickButton(choice) {
       clearInterval(interval);
       const score = scoreboard[choice] - scoreboard[comChoice(this.imgCoord)];
-      if (score == 0) {
+      if (score === 0) {
         this.result = 'Draw'
         this.draw += 1
-      } else if ([-2, 1].includes(score)) { // (score == -2 || score == 1)
+      } else if ([-2, 1].includes(score)) { // (score === -2 || score === 1)
         this.result = 'You Win'
         this.win += 1
       } else {
