@@ -55,9 +55,9 @@ class RockPaperScissors extends Component {
     }
   };
 
-  onClickButton = (choice) => {
+  onClickButton = (choice) => () => {
     clearInterval(this.interval);
-    const { imgCoord} = this.state;
+    const { imgCoord } = this.state;
     const score = scoreBoard[choice] - scoreBoard[comChoice(imgCoord)];
     if (score === 0) {
       this.setState((prevState) => {
@@ -70,21 +70,20 @@ class RockPaperScissors extends Component {
       this.setState((prevState) => {
         return {
           result: 'You Win',
-          win: prevState.win +1,
+          win: prevState.win + 1,
         };
       });
     } else {
       this.setState((prevState) => {
         return {
           result: 'You Lose',
-          lose: prevState.lose +1,
+          lose: prevState.lose + 1,
         };
       });
     }
     setTimeout(() => {
       this.interval = setInterval(this.repeatRockPaperScissors, 100);
-    }, 1000)
-    
+    }, 1000);
   };
 
   render() {
@@ -93,9 +92,9 @@ class RockPaperScissors extends Component {
       <>
         <div id="computer" style={{ background: `url(img/rockPaperScissors.jpg) ${imgCoord} 0` }}></div>
         <div>
-          <button id="rock" onClick={() => this.onClickButton('rock')}>Rock</button>
-          <button id="paper" onClick={() => this.onClickButton('paper')}>Paper</button>
-          <button id="scissors" onClick={() => this.onClickButton('scissors')}>Scissors</button>
+          <button id="rock" onClick={this.onClickButton('rock')}>Rock</button>
+          <button id="paper" onClick={this.onClickButton('paper')}>Paper</button>
+          <button id="scissors" onClick={this.onClickButton('scissors')}>Scissors</button>
         </div>
         <div>{result}</div>
         <div>Win : { win }, Draw : { draw }, Lose : { lose }</div>
