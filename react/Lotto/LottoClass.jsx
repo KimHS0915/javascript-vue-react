@@ -1,6 +1,7 @@
 // const React = require('react');
 // const { Component } = React;
 import React, { Component } from 'react';
+import Ball from './Ball';
 
 const getWinNumbers = () => {
   const candidate = Array(45).fill().map((v, i) => i + 1);
@@ -21,6 +22,27 @@ class Lotto extends Component {
     reset: false,
   };
 
+  timeouts = [];
+
+  componentDidMount() {
+    const { winNumbers } = this.state;
+    for (let i = 0; i < winNumbers.length - 1; i++) {
+      setTimeout(() => {
+        this.setState((prevState) => {
+          return {
+            winBalls: [...prevState.winBalls, winNumbers[i]],
+          };
+        });
+      }, (i + 1) * 1000);
+    }
+     setTimeout(() => {
+      this.setState({
+        bonus: winNumbers[6],
+        reset: true,
+      });
+    }, 7000);
+  }
+
   onClickReset = () => {};
 
   render() {
@@ -30,8 +52,10 @@ class Lotto extends Component {
         <div>
           <div>Winning Number</div>
           <div id="result">
+            {winBalls.map((v) => <Ball key={v} number={v} />)}
           </div>
           <div>Bonus</div>
+          {bonus && <Ball number={bonus} />}
           <button onClick={reset ? this.onClickReset : () => {}}>Reset</button>
         </div>
       </>
