@@ -8,7 +8,7 @@ import ReactDom from 'react-dom';
 import { hot } from 'react-hot-loader/root';
 
 // const Lotto = require('./LottoClass');
-import Lotto from './LottoClass';
+import Lotto from './LottoHooks';
 
 const Hot = hot(Lotto);
 
