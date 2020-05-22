@@ -52,7 +52,7 @@ const reducer = (state, action) => {
 
 const TicTacToe = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { tableData, turn, winner, recentCell } = state;
+  const { tableData, turn, recentCell } = state;
 
   const onClickTable = useCallback(() => {
     dispatch({ type: SET_WINNER, winner: 'O' });
