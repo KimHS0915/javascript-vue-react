@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import Table from './Table';
+import Form from './Form'
 
 const initialState = {
   tableData: [],
@@ -19,6 +20,7 @@ const MineSweeper = () => {
 
   return (
     <>
+      <Form />
       <div>{state.timer}</div>
       <Table />
       <div>{state.result}</div>
