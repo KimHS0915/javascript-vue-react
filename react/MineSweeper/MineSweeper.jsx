@@ -2,7 +2,16 @@ import React, { useReducer, createContext, useMemo } from 'react';
 import Table from './Table';
 import Form from './Form'
 
-export const CODE = {};
+export const CODE = {
+  OPENED_BOX: 'OPENED_BOX',
+  QUESTION: 'QUESTION',
+  FLAG: 'FLAG',
+  FLAG_MINE: 'FLAG_MINE',
+  QUESTION_MINE: 'QUESTION_MINE',
+  CLICKED_MINE: 'CLICKED_MINE',
+  NORMAL_BOX: 'NORMAL_BOX',
+  MINE: 'MINE',
+}
 
 export const TableContext = createContext({
   tableData: [],
@@ -15,7 +24,30 @@ const initialState = {
   result: '',
 };
 
-const plantMine = () => {};
+const plantMine = (row, cell, mine) => {
+  const candidate = Array(row * cell).fill().map((arr, i) => {
+    return i;
+  });
+  const shuffle = [];
+  while (candidate.length > row * cell - mine) {
+    const chosen = candidate.splice(Math.floor(Math.random() * candidate.length), 1)[0];
+    shuffle.push(chosen);
+  }
+  const data = [];
+  for (let i = 0; i < row; i++) {
+    const rowData = [];
+    data.push(rowData);
+    for (let j = 0; j < cell; j++) {
+      rowData.push(CODE.NORMAL_BOX);
+    }
+  }
+  for (let k = 0; k < shuffle.length; k++) {
+    const ver = Math.floor(shuffle[k] / cell);
+    const hor = shuffle[k] % cell;
+    data[ver][hor] = CODE.MINE;
+  }
+  return data;
+};
 
 export const START_GAME = 'START_GAME';
 
