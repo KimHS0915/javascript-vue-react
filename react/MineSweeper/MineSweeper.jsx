@@ -15,6 +15,7 @@ export const CODE = {
 
 export const TableContext = createContext({
   tableData: [],
+  pause: true,
   dispatch: () => {},
 });
 
@@ -22,6 +23,7 @@ const initialState = {
   tableData: [],
   timer: 0,
   result: '',
+  pause: true,
 };
 
 const plantMine = (row, cell, mine) => {
@@ -50,6 +52,11 @@ const plantMine = (row, cell, mine) => {
 };
 
 export const START_GAME = 'START_GAME';
+export const OPEN_CELL = 'OPEN_CELL';
+export const CLICK_MINE = 'CLICK_MINE';
+export const FLAG_CELL = 'FLAG_CELL';
+export const QUESTION_CELL = 'QUESTION_CELL';
+export const NORMALIZE_CELL = 'NORMALIZE_CELL';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -57,7 +64,66 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: plantMine(action.row, action.cell, action.mine),
+        pause: false,
       };
+    case OPEN_CELL: {
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      tableData[action.row][action.cell] = CODE.OPENED_BOX;
+      return {
+        ...state,
+        tableData,
+      };
+    }
+    case CLICK_MINE: {
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      tableData[action.row][action.cell] = CODE.CLICKED_MINE;
+      return {
+        ...state,
+        tableData,
+        pause: true,
+      };
+    }
+    case FLAG_CELL: {
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      if (tableData[action.row][action.cell] !== CODE.MINE) {
+        tableData[action.row][action.cell] = CODE.FLAG;
+      } else if (tableData[action.row][action.cell] === CODE.MINE) {
+        tableData[action.row][action.cell] = CODE.FLAG_MINE;
+      }
+      return {
+        ...state,
+        tableData,
+      };
+    }
+    case QUESTION_CELL: {
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      if (tableData[action.row][action.cell] !== CODE.FLAG_MINE) {
+        tableData[action.row][action.cell] = CODE.QUESTION;
+      } else if (tableData[action.row][action.cell] === CODE.FLAG_MINE) {
+        tableData[action.row][action.cell] = CODE.QUESTION_MINE;
+      }
+      return {
+        ...state,
+        tableData,
+      };
+    }
+    case NORMALIZE_CELL: {
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      if (tableData[action.row][action.cell] !== CODE.QUESTION_MINE) {
+        tableData[action.row][action.cell] = CODE.NORMAL_BOX;
+      } else if (tableData[action.row][action.cell] === CODE.QUESTION_MINE) {
+        tableData[action.row][action.cell] = CODE.MINE;
+      }
+      return {
+        ...state,
+        tableData,
+      };
+    }
     default:
       return state;
   }
@@ -65,15 +131,16 @@ const reducer = (state, action) => {
 
 const MineSweeper = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { tableData, pause, timer, result } = state;
 
-  const value = useMemo(() => ({ tableData: state.tableData, dispatch}), [state.tableData]);
+  const value = useMemo(() => ({ tableData, pause, dispatch }), [tableData, pause]);
 
   return (
     <TableContext.Provider value={value}>
       <Form />
-      <div>{state.timer}</div>
+      <div>{timer}</div>
       <Table />
-      <div>{state.result}</div>
+      <div>{result}</div>
     </TableContext.Provider>
   );
 };
