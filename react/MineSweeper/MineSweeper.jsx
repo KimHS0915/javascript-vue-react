@@ -1,4 +1,4 @@
-import React, { useReducer, createContext, useMemo } from 'react';
+import React, { useReducer, createContext, useMemo, useEffect, useState } from 'react';
 import Table from './Table';
 import Form from './Form'
 
@@ -26,8 +26,8 @@ const initialState = {
     cell: 0,
     mine: 0,
   },
-  timer: 0,
-  result: '',
+  timer: '',
+  result: null,
   pause: true,
   countOpenBox: 0,
 };
@@ -63,6 +63,7 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -78,6 +79,7 @@ const reducer = (state, action) => {
         result: '',
         pause: false,
         countOpenBox: 0,
+        timer: 0,
       };
     case OPEN_CELL: {
       const tableData = [...state.tableData];      
@@ -211,6 +213,12 @@ const reducer = (state, action) => {
         tableData,
       };
     }
+    case INCREMENT_TIMER: {
+      return {
+        ...state,
+        timer: state.timer + 1,
+      };
+    }
     default:
       return state;
   }
@@ -221,6 +229,18 @@ const MineSweeper = () => {
   const { tableData, pause, timer, result } = state;
 
   const value = useMemo(() => ({ tableData, pause, dispatch }), [tableData, pause]);
+
+  useEffect(() => {
+    let timer;
+    if (pause === false) {
+      timer = setInterval(() => {
+        dispatch({ type: INCREMENT_TIMER });
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timer);
+    }
+  }, [pause]);
 
   return (
     <TableContext.Provider value={value}>
