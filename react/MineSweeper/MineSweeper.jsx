@@ -21,9 +21,15 @@ export const TableContext = createContext({
 
 const initialState = {
   tableData: [],
+  data: {
+    row: 0,
+    cell: 0,
+    mine: 0,
+  },
   timer: 0,
   result: '',
   pause: true,
+  countOpenBox: 0,
 };
 
 const plantMine = (row, cell, mine) => {
@@ -63,14 +69,22 @@ const reducer = (state, action) => {
     case START_GAME:
       return {
         ...state,
+        data: {
+          row: action.row,
+          cell: action.cell,
+          mine: action.mine,
+        },
         tableData: plantMine(action.row, action.cell, action.mine),
+        result: '',
         pause: false,
+        countOpenBox: 0,
       };
     case OPEN_CELL: {
       const tableData = [...state.tableData];      
       tableData.forEach((row, i) => {
         tableData[i] = [...state.tableData[i]];
       });
+      let countOpenBox = 0;
       const checked = [];
       const checkAround = (row, cell) => {
         if ([CODE.OPENED_BOX, CODE.FLAG, CODE.FLAG_MINE, CODE.QUESTION, CODE.QUESTION_MINE].includes(tableData[row][cell])) {
@@ -106,7 +120,6 @@ const reducer = (state, action) => {
           );
         }
         const count = around.filter((v) => [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)).length;
-        tableData[row][cell] = count;
         if (count === 0) {
           if (row > -1) {
             const near = [];
@@ -129,11 +142,24 @@ const reducer = (state, action) => {
             });
           }
         }
+        if (tableData[row][cell] === CODE.NORMAL_BOX) {
+          countOpenBox += 1;
+        }
+        tableData[row][cell] = count;
       };
       checkAround(action.row, action.cell);
+      let pause = false;
+      let result = '';
+      if (state.data.row * state.data.cell - state.data.mine === state.countOpenBox + countOpenBox) {
+        pause = true;
+        result = "You Win";
+      }
       return {
         ...state,
         tableData,
+        countOpenBox: state.countOpenBox + countOpenBox,
+        pause,
+        result,
       };
     }
     case CLICK_MINE: {
