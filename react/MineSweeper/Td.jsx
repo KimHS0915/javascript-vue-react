@@ -1,52 +1,6 @@
 import React, { useContext, useCallback, memo } from 'react';
 import { TableContext, CODE, OPEN_CELL, CLICK_MINE, FLAG_CELL, QUESTION_CELL, NORMALIZE_CELL } from './MineSweeper';
-
-const getTdStyle = (code) => {
-  switch (code) {
-    case CODE.NORMAL_BOX:
-    case CODE.MINE:
-      return {
-        background: '#444',
-      };
-    case CODE.OPENED_BOX:
-      return {
-        background: 'white',
-      };
-    case CODE.FLAG:
-    case CODE.FLAG_MINE:
-      return {
-        background: 'red',
-      }
-    case CODE.QUESTION:
-    case CODE.QUESTION_MINE:
-      return {
-        background: 'orange',
-      }
-    default:
-      return {
-        background: 'white',
-      };
-  }
-};
-
-const getTdText = (code) => {
-  switch (code) {
-    case CODE.NORMAL_BOX:
-      return '';
-    case CODE.MINE:
-      return 'X';
-    case CODE.CLICKED_MINE:
-      return 'B';
-    case CODE.FLAG:
-    case CODE.FLAG_MINE:
-      return '!';
-    case CODE.QUESTION:
-    case CODE.QUESTION_MINE:
-      return '?';
-    default:
-      return code || '';
-  }
-};
+import TdChild from './TdChild';
 
 const Td = memo(({ rowIndex, cellIndex }) => {
   const { tableData, dispatch, pause } = useContext(TableContext);
@@ -97,12 +51,8 @@ const Td = memo(({ rowIndex, cellIndex }) => {
   }, [tableData[rowIdx][cellIndex], pause]);
 
   return (
-    <td 
-      style={getTdStyle(tableData[rowIdx][cellIndex])} 
-      onClick={onLeftClickTd} 
-      onContextMenu={onRightClickTd}
-    >{getTdText(tableData[rowIdx][cellIndex])}</td>
-  );
+    <TdChild onLeftClickTd={onLeftClickTd} onRightClickTd={onRightClickTd} data={tableData[rowIdx][cellIndex]} />
+    );
 });
 
 export default Td;
