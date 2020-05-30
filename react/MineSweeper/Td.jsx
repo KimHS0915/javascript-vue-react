@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, memo } from 'react';
 import { TableContext, CODE, OPEN_CELL, CLICK_MINE, FLAG_CELL, QUESTION_CELL, NORMALIZE_CELL } from './MineSweeper';
 
 const getTdStyle = (code) => {
@@ -48,7 +48,7 @@ const getTdText = (code) => {
   }
 };
 
-const Td = ({ rowIndex, cellIndex }) => {
+const Td = memo(({ rowIndex, cellIndex }) => {
   const { tableData, dispatch, pause } = useContext(TableContext);
   const rowIdx = rowIndex.rowIndex
 
@@ -103,6 +103,6 @@ const Td = ({ rowIndex, cellIndex }) => {
       onContextMenu={onRightClickTd}
     >{getTdText(tableData[rowIdx][cellIndex])}</td>
   );
-};
+});
 
 export default Td;
