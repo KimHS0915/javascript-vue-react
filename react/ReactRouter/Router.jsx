@@ -1,19 +1,20 @@
 import React from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import BullsAndCows from '../BullsAndCows/BullsAndCowsClass';
-import Lotto from '../Lotto/LottoClass';
+
+import GameMatcher from './GameMatcher';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <div>
-        <Link to="/BullsAndCows">Bulls And Cows</Link>
+        <Link to="/game/index">Index</Link>
         &nbsp;
-        <Link to="/Lotto">Lotto</Link>
+        <Link to="/game/BullsAndCows">Bulls And Cows</Link>
+        &nbsp;
+        <Link to="/game/Lotto">Lotto</Link>
       </div>
       <div>
-        <Route path="/BullsAndCows" component={BullsAndCows} />
-        <Route path="/Lotto" component={Lotto} />
+        <Route path="/game/:name" component={GameMatcher} />
       </div>
     </BrowserRouter>
   );
