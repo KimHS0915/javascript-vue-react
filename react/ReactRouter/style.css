@@ -9,3 +9,20 @@
     font-size: 12px;
     font-weight: 'bold';
 }
+#screen {
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    user-select: none;
+}
+#screen.waiting {
+    background-color: aqua;
+}
+#screen.ready {
+    background-color: red;
+    color: white;
+}
+#screen.now {
+    background-color: green;
+    color: white;
+}
