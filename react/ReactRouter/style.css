@@ -26,3 +26,8 @@
     background-color: green;
     color: white;
 }
+#computer {
+    width: 142px;
+    height: 200px;
+    background-position: 0 0;
+}

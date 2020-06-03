@@ -14,6 +14,8 @@ const Router = () => {
         <Link to="/game/Lotto">Lotto</Link>
         &nbsp;
         <Link to="/game/ReactionTimeTest">Reaction Time Test</Link>
+        &nbsp;
+        <Link to="/game/RockPaperScissors">Rock Paper Scissors</Link>
       </div>
       <div>
         <Route path="/game/:name" component={GameMatcher} />
